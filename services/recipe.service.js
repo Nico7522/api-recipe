@@ -21,7 +21,8 @@ const recipeService = {
     const recipeToUpdate = await db.Recipe.update(changement, {
         where: { id }
     });
-    return recipeToUpdate[0] === 1;
+    const recipeUpdated = await db.Recipe.findByPk(id)
+    return recipeUpdated;
   },
   delete: async (id) => {
     const isDeleted = await db.Recipe.destroy({

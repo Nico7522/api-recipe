@@ -43,12 +43,12 @@ const recipeController = {
   update: async (req,res) => {
     const { id } = req.params;
     const data = req.body;
-    const isUpdated = await recipeService.update(id, data);
-    if (!isUpdated) {
+    const recipeUpdated = await recipeService.update(id, data);
+    if (!recipeUpdated) {
       res.sendStatus(404);
       return;
     }
-    res.sendStatus(204);
+    return res.status(201).json(recipeUpdated);
   },
 
     /**
