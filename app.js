@@ -1,11 +1,12 @@
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors')
 const db = require('./models');
 require('express-async-errors');
 const appRecipe = express();
 const dataBase = require('./models');
 const route = require('./routes')
-
+appRecipe.use(cors())
 dataBase.sequelize.authenticate()
         .then(() => console.log('ok'))
         .catch((err) => console.log(err))

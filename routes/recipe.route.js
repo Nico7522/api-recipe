@@ -3,12 +3,12 @@ const recipeController = require('../controllers/recipe.controller');
 const recipeRoute = require('express').Router()
 
 recipeRoute.route('/')
-.get()
-.post()
+.get(recipeController.getAll)
+.post(recipeController.create)
 
 recipeRoute.route('/:id')
-.get(recipeController.getAll)
+.get(recipeController.getById)
 .put()
-.delete()
+.delete(recipeController.delete)
 
 module.exports = recipeRoute;

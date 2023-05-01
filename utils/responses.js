@@ -5,4 +5,11 @@ class SuccesResponse  {
     }
 }
 
-module.exports = {SuccesResponse}
+class SuccesMultipleResponse  {
+    constructor(data, count, code = 200){
+        this.results = data,
+        this.numberOfRows = count
+        this.statusCode = code
+    }
+}
+module.exports = {SuccesResponse, SuccesMultipleResponse}

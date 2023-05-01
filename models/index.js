@@ -9,4 +9,12 @@ const dataBase = new Sequelize(DB_DATABASE, DB_USERNAME, DB_PASSWORD, {
 const db = {};
 db.sequelize = dataBase
 
+db.Recipe = require('./recipe.model')(dataBase);
+db.Ingredient = require('./ingredient.model')(dataBase);
+db.Tag = require('./tag.model')(dataBase);
+db.User = require('./user.model')(dataBase);
+db.MM_Recipe_Ingredient = require('./MM_recipe_ingredient.model')(dataBase);
+db.MM_User_React_Recipe = require('./MM_user_react_recipe.model')(dataBase);
+db.Comment = require('./comment.model')(dataBase);
+
 module.exports = db;

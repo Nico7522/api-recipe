@@ -1,10 +1,35 @@
-const recipeService = {
+const { RecipeDTO } = require("../DTO/recipe.dto");
+const db = require("../models");
 
-    getAll: async () => {},
-    getById: async (id) => {},
-    create: async (recipe) => {},
-    update: async(id, changement) => {},
-    delete: async(id) => {}
+const recipeService = {
+  getAll: async () => {
+    const { rows, count } = await db.Recipe.findAndCountAll({
+      distinct: true,
+    });
+
+    return { recipes: rows.map((r) => new RecipeDTO(r)), count };
+  },
+  getById: async (id) => {
+    const recipe = await db.Recipe.findByPk(id)
+    return recipe ? new RecipeDTO(recipe) : null
+  },
+  create: async (recipeToCreate) => {
+    const recipe = await db.Recipe.create(recipeToCreate);
+    return recipe ? recipe : null;
+  },
+  update: async (id, changement) => {
+    const recipeToUpdate = await db.Recipe.update(changement, {
+        where: { id }
+    });
+    return recipeToUpdate[0] === 1;
+  },
+  delete: async (id) => {
+    const isDeleted = await db.Recipe.destroy({
+        where: { id }
+    });
+    console.log('isDeleted => ', isDeleted);
+    return isDeleted === 1;
+  },
 };
 
 module.exports = recipeService;
