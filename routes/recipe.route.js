@@ -8,7 +8,7 @@ recipeRoute.route('/')
 
 recipeRoute.route('/:id')
 .get(recipeController.getById)
-.put()
+.put(recipeController.update)
 .delete(recipeController.delete)
 
 module.exports = recipeRoute;
