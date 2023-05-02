@@ -1,6 +1,6 @@
 const { Request, Response } = require("express");
 const recipeService = require("../services/recipe.service");
-const { SuccesResponse, SuccesMultipleResponse } = require("../utils/responses");
+const { SuccesResponse, SuccesMultipleResponse, CountResponse } = require("../utils/responses");
 const recipeController = {
   /**
    * @param {Request} req
@@ -9,6 +9,17 @@ const recipeController = {
   getAll: async (req, res) => {
     const { recipes, count } = await recipeService.getAll();
     res.status(200).json(new SuccesMultipleResponse(recipes, count));
+  },
+
+  /**
+   * @param {Request} req
+   * @param {Response} res
+   */
+  Count: async (req, res) => {
+    const {ingredient} = req.params
+    const count = await recipeService.Count(ingredient);
+    res.status(200).json(new CountResponse(count.count));
+
   },
 
     /**

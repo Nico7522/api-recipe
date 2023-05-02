@@ -53,12 +53,12 @@ module.exports = (sequelize) => {
             }
         },
         password: {
-            type: DataTypes.STRING(100),
+            type: DataTypes.STRING,
             allowNull: false,
             validate: {
+                is: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/,
                 notNull: true,
                 notEmpty: true,
-                is: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/,
                 len: [8,100]
             }
         },
