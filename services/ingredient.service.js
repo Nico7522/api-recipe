@@ -17,7 +17,6 @@ const ingredientService = {
     },
     create: async (ingredientToCreate) => {
         const ingredient = await db.Ingredient.create(ingredientToCreate);
-        console.log('ingredient =>', ingredient);
         return ingredient ? ingredient : null;
     },
     update: async (id, changement) => {

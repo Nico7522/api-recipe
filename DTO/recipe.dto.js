@@ -8,7 +8,7 @@ class RecipeDTO {
         this.imgURL = image,
         this.valid = valid,
         this.ingredients = Ingredients ? Ingredients.map((i) => new IngredientDTO(i)) : [];
-        this.creationDate = new Date(createdAt).toLocaleString('fr');
+        this.createdAt = new Date(createdAt).toLocaleString('fr');
     }
 }
 

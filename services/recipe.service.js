@@ -1,8 +1,8 @@
-const { where } = require("sequelize");
 const { RecipeDTO } = require("../DTO/recipe.dto");
 const db = require("../models");
 const { Ingredient } = require("../models");
 const sequelize = require("sequelize");
+const { Op } = require("sequelize");
 
 const recipeService = {
   getAll: async () => {
@@ -14,17 +14,21 @@ const recipeService = {
     return { recipes: rows.map((r) => new RecipeDTO(r)), count };
   },
 
-  Count: async (ingredient) => {
+  Count: async (nameToSearch) => {
+
     const findRecipesByIngredient = await db.Recipe.findAll({
-      include: [{ model: Ingredient, where: { name: ingredient } }],
+      
+      include: [{ model: Ingredient, where: { [Op.and]: {name: nameToSearch}}}],  
       attributes: {
         include: [
-          [sequelize.fn("COUNT", sequelize.col("Ingredients.id")), "count"]],
-          
-      },
-      raw: true,
-    });
 
+          [sequelize.fn("COUNT", sequelize.col("Recipe.id")), "count"]],   
+      },
+     
+      raw: true,
+     
+    });
+    console.log(findRecipesByIngredient.length);
     return findRecipesByIngredient[0];
   },
 

@@ -8,7 +8,21 @@ const ConnexionService = {
         const user = await  db.User.create(userToCreate);
         return user ? new UserDTO(user) : null
     },
-    login: async() => {}
+    login: async(email, password) => {
+        const user = await db.User.findOne({
+            where : { email }
+        })
+
+        if (!user) {
+            return null;
+        }
+        const isValid = await argon2.verify(user.password, password)
+        if (!isValid) {
+            return null;
+        }
+
+        return new UserDTO(user);
+    }
 };
 
 module.exports = ConnexionService;

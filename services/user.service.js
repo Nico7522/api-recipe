@@ -1,6 +1,6 @@
 const { UserDTO } = require("../DTO/user.dto");
 const db = require("../models");
-
+const argon2 = require('argon2')
 
 const userService = {
 
@@ -13,9 +13,20 @@ const userService = {
             count
         }
     },
-    getById: async() => {},
-    create: async() => {},
-    update: async() => {},
+    getById: async(id) => {
+        const user = await db.User.findByPk(id);
+        return user ? new UserDTO(user): null;
+    },
+    
+    update: async(id, changement) => {
+        const hashedPswd = await argon2.hash(changement.password);
+        changement.password = hashedPswd;
+        const userToUpdate = await db.User.update(changement, {
+            where: { id }
+        });
+        const userUpdated = await db.User.findByPk(id)
+        return new UserDTO(userUpdated)
+    },
     delete: async() => {}
 }
 

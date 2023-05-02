@@ -18,6 +18,14 @@ const ConnexionController = {
    * @param {Request} req
    * @param {Response} res
    */
-  login: async () => {},
+  login: async (req, res) => {
+    const {email, password} = req.body
+    const user = await ConnexionService.login(email, password);
+    if (!user) {
+        res.sendStatus(404);
+        return;
+    }
+    res.status(200).json(new SuccesResponse(user))
+  },
 };
 module.exports = ConnexionController;

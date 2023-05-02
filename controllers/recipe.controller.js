@@ -16,8 +16,9 @@ const recipeController = {
    * @param {Response} res
    */
   Count: async (req, res) => {
-    const {ingredient} = req.params
-    const count = await recipeService.Count(ingredient);
+    console.log('req query =>', req.query);
+    const { name } = req.query
+    const count = await recipeService.Count(name);
     res.status(200).json(new CountResponse(count.count));
 
   },

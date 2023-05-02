@@ -6,7 +6,7 @@ recipeRoute.route('/')
 .get(recipeController.getAll)
 .post(recipeController.create)
 
-recipeRoute.route('/:ingredient')
+recipeRoute.route('/search')
 .get(recipeController.Count)
 
 recipeRoute.route('/:id')

@@ -8,7 +8,8 @@ userRoute.route('/')
 
 userRoute.route('/:id')
 .get(userController.GetById)
-
+.put(userController.update)
+.delete(userController.delete)
 userRoute.route('/signup')
 .post(ConnexionController.signup)
 
