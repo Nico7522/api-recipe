@@ -17,4 +17,7 @@ db.MM_Recipe_Ingredient = require('./MM_recipe_ingredient.model')(dataBase);
 db.MM_User_React_Recipe = require('./MM_user_react_recipe.model')(dataBase);
 db.Comment = require('./comment.model')(dataBase);
 
+db.Recipe.belongsToMany(db.Ingredient, {through: db.MM_Recipe_Ingredient})
+db.Ingredient.belongsToMany(db.Recipe, {through: db.MM_Recipe_Ingredient})
+
 module.exports = db;

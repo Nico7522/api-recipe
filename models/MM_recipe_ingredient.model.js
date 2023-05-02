@@ -6,7 +6,7 @@ const {Sequelize, ModelStatic, DataTypes} = require('sequelize');
  */
 
 module.exports = (sequelize) => {
-    const MM_recipe_ingredient = sequelize.define('MM_recipe,ingredient', {
+    const MM_recipe_ingredient = sequelize.define('MM_recipe_ingredient', {
         quantity: {
             type: DataTypes.FLOAT(6),
             allowNull: false,
