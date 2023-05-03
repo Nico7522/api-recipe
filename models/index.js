@@ -33,7 +33,10 @@ db.Tag.belongsToMany(db.Recipe, {through: "MM_Recipe_Tag"})
 db.User.hasMany(db.Recipe);
 db.Recipe.belongsTo(db.User);
 
-db.User.belongsToMany(db.Recipe, {through: db.Comment})
-db.Recipe.belongsToMany(db.User, {through: db.Comment})
+db.User.hasMany(db.Comment)
+db.Comment.belongsTo(db.User)
+
+db.Recipe.hasMany(db.Comment)
+db.Comment.belongsTo(db.Recipe)
 
 module.exports = db;

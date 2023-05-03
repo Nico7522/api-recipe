@@ -96,11 +96,10 @@ const recipeController = {
    * @param {Response} res
    */
   comment: async(req, res) => {
-    const recipeId = req.body.recipeId;
-    const userId = req.body.userId;
-    const text = req.body.text;
-    const newComment = await recipeService.comment(recipeId, userId, text);
-    res.location('/recipe/' + recipeId);
+    console.log(req.body);
+    const data = req.body
+    const newComment = await recipeService.comment(data);
+    res.location('/recipe/' + req.body.RecipeId);
     res.status(201).json(newComment);
   }
 };

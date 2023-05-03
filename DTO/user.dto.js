@@ -9,7 +9,7 @@ class UserDTO {
         this.email = email,
         this.avatar= avatar,
         this.valid = valid,
-        this.recipes = Recipes ? Recipes.map(r => {return new RecipesUserDTO(r)}): null,
+        this.recipes = Recipes ? Recipes.map(r => new RecipesUserDTO(r)): null,
         this.createdAt = new Date(createdAt).toLocaleString('fr');
     }
 }

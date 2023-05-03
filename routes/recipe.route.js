@@ -10,8 +10,8 @@ recipeRoute.route('/')
 recipeRoute.route('/react')
 .post(recipeController.react)
 
-recipeRoute.route('/comment')
-.post(recipeController.comment)
+
+recipeRoute.route('/comment').post(recipeController.comment)
 
 recipeRoute.route('/search')
 .get(recipeController.Count)

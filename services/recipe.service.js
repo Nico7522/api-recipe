@@ -20,8 +20,6 @@ const recipeService = {
     return { recipes: rows.map((r) => new RecipeDTO(r)), count };
   },
 
-
-
   Count: async (nameToSearch) => {
     const findRecipesByIngredient = await db.Recipe.findAll({
       include: [
@@ -99,15 +97,15 @@ const recipeService = {
     try {
       await recipe.addUser(
         userId,
-        { through: { reaction: reactionToCreate } },
+        { through: { reaction : reactionToCreate } },
         { transaction }
       );
 
       await transaction.commit();
-      const newComment = await db.Recipe.findByPk(recipe.id, {
+      const newReaction = await db.Recipe.findByPk(recipe.id, {
         includes: [User],
       });
-      return newComment;
+      return newReaction;
     } catch (error) {
       console.log(error);
       await transaction.rollback();
@@ -115,23 +113,28 @@ const recipeService = {
     }
   },
 
-  comment: async(recipeId, userId, text) => {
-    const transaction = await db.sequelize.transaction();
-    let recipe = await db.Recipe.findByPk(recipeId);
-    try {
+  comment: async (comment) => {
     
-      await recipe.addUser(userId, {through: {text: text}}, {transaction});
-      await transaction.commit();
-      const newComment = await db.Recipe.findByPk(recipe.id)
-      console.log(newComment);
-      return newComment
-    } catch (error) {
-      console.log(error);
-      await transaction.rollback();
-      return;
-    }
-
-  }
+    const commentCreated = await db.Comment.create(comment);
+    return commentCreated
+    // const transaction = await db.sequelize.transaction();
+    // let user = await db.User.findByPk(userId);
+    // try {
+    //   await user.addRecipe(
+    //     recipeId,
+    //     { through: { text: comment } },
+    //     { transaction }
+    //   );
+    //   await transaction.commit();
+    //   const newComment = await db.User.findByPk(user.id);
+      
+    //   return newComment;
+    // } catch (error) {
+    //   console.log(error);
+    //   await transaction.rollback();
+    //   return;
+    // }
+  },
 };
 
 module.exports = recipeService;
