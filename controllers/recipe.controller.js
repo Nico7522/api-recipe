@@ -11,6 +11,7 @@ const recipeController = {
     res.status(200).json(new SuccesMultipleResponse(recipes, count));
   },
 
+
   /**
    * @param {Request} req
    * @param {Response} res
@@ -80,14 +81,27 @@ const recipeController = {
    * @param {Request} req
    * @param {Response} res
    */
-  comment: async (req, res) => {
+  react: async (req, res) => {
     const recipeId = req.body.recipeId;
     const userId = req.body.userId;
     const reaction = req.body.reaction;
-    const newReaction = await recipeService.comment(recipeId, userId, reaction);
+    const newReaction = await recipeService.react(recipeId, userId, reaction);
     res.location('/recipe/' + recipeId);
     res.status(201).json(newReaction);
 
+  },
+
+      /**
+   * @param {Request} req
+   * @param {Response} res
+   */
+  comment: async(req, res) => {
+    const recipeId = req.body.recipeId;
+    const userId = req.body.userId;
+    const text = req.body.text;
+    const newComment = await recipeService.comment(recipeId, userId, text);
+    res.location('/recipe/' + recipeId);
+    res.status(201).json(newComment);
   }
 };
 

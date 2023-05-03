@@ -1,11 +1,13 @@
 const { UserDTO } = require("../DTO/user.dto");
 const db = require("../models");
-const argon2 = require('argon2')
+const argon2 = require('argon2');
+const { Recipe } = require("../models");
 
 const userService = {
 
     getAll: async() => {
         const { rows, count } = await db.User.findAndCountAll({
+            include: [Recipe],
             distinct: true
         });
         return {

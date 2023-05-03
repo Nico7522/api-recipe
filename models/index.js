@@ -17,10 +17,23 @@ db.MM_Recipe_Ingredient = require('./MM_recipe_ingredient.model')(dataBase);
 db.MM_User_React_Recipe = require('./MM_user_react_recipe.model')(dataBase);
 db.Comment = require('./comment.model')(dataBase);
 
+// Liaison entre les recipes et les ingredients
 db.Recipe.belongsToMany(db.Ingredient, {through: db.MM_Recipe_Ingredient})
 db.Ingredient.belongsToMany(db.Recipe, {through: db.MM_Recipe_Ingredient})
 
+
+// Liaison les recipes/users et les réactions
 db.Recipe.belongsToMany(db.User, {through: db.MM_User_React_Recipe})
 db.User.belongsToMany(db.Recipe, {through: db.MM_User_React_Recipe})
+
+// Liaison entre les recipes et les tags
+db.Recipe.belongsToMany(db.Tag, {through: "MM_Recipe_Tag"})
+db.Tag.belongsToMany(db.Recipe, {through: "MM_Recipe_Tag"})
+
+db.User.hasMany(db.Recipe);
+db.Recipe.belongsTo(db.User);
+
+db.User.belongsToMany(db.Recipe, {through: db.Comment})
+db.Recipe.belongsToMany(db.User, {through: db.Comment})
 
 module.exports = db;

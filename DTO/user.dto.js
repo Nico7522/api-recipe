@@ -1,5 +1,7 @@
+const { RecipeDTO } = require("./recipe.dto");
+
 class UserDTO {
-    constructor({id, name, surname, birthdate, email, avatar, valid, createdAt }){
+    constructor({id, name, surname, birthdate, email, avatar, valid, Recipes, createdAt }){
         this.id = id,
         this.name = name,
         this.surname = surname,
@@ -7,7 +9,15 @@ class UserDTO {
         this.email = email,
         this.avatar= avatar,
         this.valid = valid,
+        this.recipes = Recipes ? Recipes.map(r => {return new RecipesUserDTO(r)}): null,
         this.createdAt = new Date(createdAt).toLocaleString('fr');
+    }
+}
+
+class RecipesUserDTO {
+    constructor({id, name}){
+        this.id = id
+        this.name = name
     }
 }
 

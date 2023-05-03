@@ -1,24 +1,28 @@
 const { RecipeDTO } = require("../DTO/recipe.dto");
 const db = require("../models");
-const { Ingredient, User, Recipe, MM_User_React_Recipe } = require("../models");
+const {
+  Ingredient,
+  User,
+  Recipe,
+  MM_User_React_Recipe,
+  Tag,
+} = require("../models");
 const sequelize = require("sequelize");
-const { Op } = require("sequelize");
+const { Op, where } = require("sequelize");
+const { raw } = require("mysql2");
 
 const recipeService = {
   getAll: async () => {
     const { rows, count } = await db.Recipe.findAndCountAll({
-      include: [Ingredient, User],
+      include: [Ingredient, User, Tag],
       distinct: true,
     });
-
     return { recipes: rows.map((r) => new RecipeDTO(r)), count };
   },
 
-  Count: async (nameToSearch) => {
-    console.log("nameToSearch =>", nameToSearch);
-    let tab = [];
-    nameToSearch.forEach((n) => tab.push(n));
 
+
+  Count: async (nameToSearch) => {
     const findRecipesByIngredient = await db.Recipe.findAll({
       include: [
         {
@@ -57,10 +61,16 @@ const recipeService = {
           });
         }
       }
+      if (recipeToCreate.tags) {
+        for (const tag of recipeToCreate.tags) {
+          await recipe.addTag(tag.id, { transaction });
+        }
+      }
       await transaction.commit();
       const recipeCreated = await db.Recipe.findByPk(recipe.id, {
-        include: [Ingredient],
+        include: [Ingredient, Tag, User],
       });
+
       return recipeCreated ? new RecipeDTO(recipeCreated) : null;
     } catch (error) {
       await transaction.rollback();
@@ -83,7 +93,7 @@ const recipeService = {
     return isDeleted === 1;
   },
 
-  comment: async (recipeId, userId, reactionToCreate) => {
+  react: async (recipeId, userId, reactionToCreate) => {
     const transaction = await db.sequelize.transaction();
     let recipe = await db.Recipe.findByPk(recipeId);
     try {
@@ -104,6 +114,24 @@ const recipeService = {
       return;
     }
   },
+
+  comment: async(recipeId, userId, text) => {
+    const transaction = await db.sequelize.transaction();
+    let recipe = await db.Recipe.findByPk(recipeId);
+    try {
+    
+      await recipe.addUser(userId, {through: {text: text}}, {transaction});
+      await transaction.commit();
+      const newComment = await db.Recipe.findByPk(recipe.id)
+      console.log(newComment);
+      return newComment
+    } catch (error) {
+      console.log(error);
+      await transaction.rollback();
+      return;
+    }
+
+  }
 };
 
 module.exports = recipeService;
