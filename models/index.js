@@ -20,4 +20,7 @@ db.Comment = require('./comment.model')(dataBase);
 db.Recipe.belongsToMany(db.Ingredient, {through: db.MM_Recipe_Ingredient})
 db.Ingredient.belongsToMany(db.Recipe, {through: db.MM_Recipe_Ingredient})
 
+db.Recipe.belongsToMany(db.User, {through: db.MM_User_React_Recipe})
+db.User.belongsToMany(db.Recipe, {through: db.MM_User_React_Recipe})
+
 module.exports = db;

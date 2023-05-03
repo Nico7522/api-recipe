@@ -1,13 +1,13 @@
 const { RecipeDTO } = require("../DTO/recipe.dto");
 const db = require("../models");
-const { Ingredient } = require("../models");
+const { Ingredient, User, Recipe, MM_User_React_Recipe } = require("../models");
 const sequelize = require("sequelize");
 const { Op } = require("sequelize");
 
 const recipeService = {
   getAll: async () => {
     const { rows, count } = await db.Recipe.findAndCountAll({
-      include: [Ingredient],
+      include: [Ingredient, User],
       distinct: true,
     });
 
@@ -15,21 +15,27 @@ const recipeService = {
   },
 
   Count: async (nameToSearch) => {
+    console.log("nameToSearch =>", nameToSearch);
+    let tab = [];
+    nameToSearch.forEach((n) => tab.push(n));
 
     const findRecipesByIngredient = await db.Recipe.findAll({
-      
-      include: [{ model: Ingredient, where: { [Op.and]: {name: nameToSearch}}}],  
-      attributes: {
-        include: [
-
-          [sequelize.fn("COUNT", sequelize.col("Recipe.id")), "count"]],   
-      },
-     
-      raw: true,
-     
+      include: [
+        {
+          model: Ingredient,
+          where: { name: nameToSearch },
+          attributes: [],
+          through: { attributes: [] },
+        },
+      ],
+      attributes: [[sequelize.fn("COUNT", sequelize.col("Recipe.id")), "tot"]],
+      group: "Recipe.id",
+      having: sequelize.where(
+        sequelize.fn("COUNT", sequelize.col("Recipe.id")),
+        { [Op.eq]: Array.isArray(nameToSearch) ? nameToSearch.length : 1 }
+      ),
     });
-    console.log(findRecipesByIngredient.length);
-    return findRecipesByIngredient[0];
+    return findRecipesByIngredient.length;
   },
 
   getById: async (id) => {
@@ -44,7 +50,6 @@ const recipeService = {
       recipe = await db.Recipe.create(recipeToCreate, { transaction });
 
       if (recipeToCreate.ingredients) {
-        console.log("dans le service =>", recipeToCreate.ingredients);
         for (const ingre of recipeToCreate.ingredients) {
           await recipe.addIngredient(ingre.id, {
             through: { quantity: ingre.quantity, unit: ingre.unit },
@@ -74,8 +79,30 @@ const recipeService = {
     const isDeleted = await db.Recipe.destroy({
       where: { id },
     });
-    console.log("isDeleted => ", isDeleted);
+
     return isDeleted === 1;
+  },
+
+  comment: async (recipeId, userId, reactionToCreate) => {
+    const transaction = await db.sequelize.transaction();
+    let recipe = await db.Recipe.findByPk(recipeId);
+    try {
+      await recipe.addUser(
+        userId,
+        { through: { reaction: reactionToCreate } },
+        { transaction }
+      );
+
+      await transaction.commit();
+      const newComment = await db.Recipe.findByPk(recipe.id, {
+        includes: [User],
+      });
+      return newComment;
+    } catch (error) {
+      console.log(error);
+      await transaction.rollback();
+      return;
+    }
   },
 };
 

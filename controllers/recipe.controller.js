@@ -19,7 +19,7 @@ const recipeController = {
     console.log('req query =>', req.query);
     const { name } = req.query
     const count = await recipeService.Count(name);
-    res.status(200).json(new CountResponse(count.count));
+    res.status(200).json(new CountResponse(count));
 
   },
 
@@ -76,6 +76,19 @@ const recipeController = {
     }
     res.sendStatus(204);
   },
+    /**
+   * @param {Request} req
+   * @param {Response} res
+   */
+  comment: async (req, res) => {
+    const recipeId = req.body.recipeId;
+    const userId = req.body.userId;
+    const reaction = req.body.reaction;
+    const newReaction = await recipeService.comment(recipeId, userId, reaction);
+    res.location('/recipe/' + recipeId);
+    res.status(201).json(newReaction);
+
+  }
 };
 
 module.exports = recipeController;

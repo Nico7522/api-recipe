@@ -27,7 +27,12 @@ const userService = {
         const userUpdated = await db.User.findByPk(id)
         return new UserDTO(userUpdated)
     },
-    delete: async() => {}
+    delete: async(id) => {
+        const isDeleted = await db.User.destroy({
+            where: { id }
+        })
+        return isDeleted === 1;
+    }
 }
 
 module.exports = userService;
