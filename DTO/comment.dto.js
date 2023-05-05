@@ -1,10 +1,13 @@
-class ReactDTO {
-    constructor({id, name, status, MM_user_react_recipe}){
+// const { User } = require("../models")
+
+class CommentDTO {
+    constructor({id, text, UserId, name, createdAt}) {
         this.id = id,
-        this.name = name,
-        this.status = status,
-        this.reaction = MM_user_react_recipe.reaction 
+        this.text = text,
+        this.userId = UserId,
+        this.userName = name ? name : null;
+        this.createdAt = new Date(createdAt).toLocaleString('fr')
     }
 }
 
-module.exports = {ReactDTO}
+module.exports = { CommentDTO }

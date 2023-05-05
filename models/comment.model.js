@@ -16,6 +16,15 @@ module.exports = (sequelize) => {
                 
             }
         },
+        name: {
+            type: DataTypes.STRING(25),
+            allowNull: true,
+            validate: {
+                notNull: false,
+                notEmpty: false,
+                len: [1, 25]
+            }
+        },
         valid: {
             type: DataTypes.BOOLEAN,
             allowNull: false,

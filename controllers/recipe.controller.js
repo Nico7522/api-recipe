@@ -11,6 +11,15 @@ const recipeController = {
     res.status(200).json(new SuccesMultipleResponse(recipes, count));
   },
 
+  /**
+   * @param {Request} req
+   * @param {Response} res
+   */
+   getAllRaw: async (req, res) => {
+    const recipes = await recipeService.getAllRaw();
+    res.status(200).json(recipes);
+  },
+
 
   /**
    * @param {Request} req
@@ -101,6 +110,29 @@ const recipeController = {
     const newComment = await recipeService.comment(data);
     res.location('/recipe/' + req.body.RecipeId);
     res.status(201).json(newComment);
+  },
+
+         /**
+   * @param {Request} req
+   * @param {Response} res
+   */
+  getComment: async (req, res) => {
+    const allComments = await recipeService.getComment();
+    res.status(200).json(allComments);
+
+  },
+
+       /**
+   * @param {Request} req
+   * @param {Response} res
+   */
+  deleteComment: async (req,res) => {
+    const { id } = req.body;
+    const isDeleted = await recipeService.deleteComment(id);
+    if (!isDeleted) {
+      res.sendStatus(404)
+    }
+    res.sendStatus(204);
   }
 };
 

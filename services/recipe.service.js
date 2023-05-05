@@ -1,4 +1,4 @@
-const { RecipeDTO } = require("../DTO/recipe.dto");
+const { RecipeDTO, RecipeRawDTO } = require("../DTO/recipe.dto");
 const db = require("../models");
 const {
   Ingredient,
@@ -6,18 +6,33 @@ const {
   Recipe,
   MM_User_React_Recipe,
   Tag,
+  Comment,
 } = require("../models");
 const sequelize = require("sequelize");
 const { Op, where } = require("sequelize");
 const { raw } = require("mysql2");
+const { CommentDTO } = require("../DTO/comment.dto");
 
 const recipeService = {
   getAll: async () => {
     const { rows, count } = await db.Recipe.findAndCountAll({
-      include: [Ingredient, User, Tag],
+      include: [Ingredient, {model: User, as: "creator"}, Tag, Comment, {model: User, as: "Users"}],
       distinct: true,
+      
     });
     return { recipes: rows.map((r) => new RecipeDTO(r)), count };
+  },
+  getAllRaw: async () => {
+    const recipes = await db.Recipe.findAll({
+      include: [{model:Ingredient, as: "Ingredients"},  {model:Tag, as: "Tags"}, {model:Comment, as: "Comments"}, {
+        model: User,
+        as: 'User',
+       
+    }, {model: User, as: "Users"}],
+      
+      
+    });
+    return recipes.map(r => new RecipeRawDTO(r))
   },
 
   Count: async (nameToSearch) => {
@@ -92,6 +107,7 @@ const recipeService = {
   },
 
   react: async (recipeId, userId, reactionToCreate) => {
+    console.log(userId);
     const transaction = await db.sequelize.transaction();
     let recipe = await db.Recipe.findByPk(recipeId);
     try {
@@ -115,26 +131,33 @@ const recipeService = {
 
   comment: async (comment) => {
     
+   
+    const user = await db.User.findByPk(comment.UserId);
+    comment.name = user.name;
+    console.log(comment);
     const commentCreated = await db.Comment.create(comment);
-    return commentCreated
-    // const transaction = await db.sequelize.transaction();
-    // let user = await db.User.findByPk(userId);
-    // try {
-    //   await user.addRecipe(
-    //     recipeId,
-    //     { through: { text: comment } },
-    //     { transaction }
-    //   );
-    //   await transaction.commit();
-    //   const newComment = await db.User.findByPk(user.id);
-      
-    //   return newComment;
-    // } catch (error) {
-    //   console.log(error);
-    //   await transaction.rollback();
-    //   return;
-    // }
+    const commentCreatedWithUser = await db.Comment.findByPk(commentCreated.id, {
+      include: [User]
+    })
+    return new CommentDTO(commentCreatedWithUser)
+
   },
+
+  getComment: async() => {
+    const allComments = await db.Comment.findAll({
+      include: [User],
+      
+    });
+    return allComments;
+  },
+
+
+  deleteComment: async(id) => {
+    const isDeleted = await db.Comment.destroy({
+      where: { id }
+    })
+    return isDeleted === 1;
+  }
 };
 
 module.exports = recipeService;

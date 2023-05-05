@@ -30,8 +30,9 @@ db.User.belongsToMany(db.Recipe, {through: db.MM_User_React_Recipe})
 db.Recipe.belongsToMany(db.Tag, {through: "MM_Recipe_Tag"})
 db.Tag.belongsToMany(db.Recipe, {through: "MM_Recipe_Tag"})
 
-db.User.hasMany(db.Recipe);
-db.Recipe.belongsTo(db.User);
+db.User.hasMany(db.Recipe, { foreignKey: {name: "UserId", field: "creatorId", as: "creator"}});
+db.Recipe.belongsTo(db.User, {as: "creator" });
+
 
 db.User.hasMany(db.Comment)
 db.Comment.belongsTo(db.User)
