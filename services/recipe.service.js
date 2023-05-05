@@ -14,10 +14,12 @@ const { raw } = require("mysql2");
 const { CommentDTO } = require("../DTO/comment.dto");
 
 const recipeService = {
-  getAll: async () => {
+  getAll: async (offset, limit) => {
     const { rows, count } = await db.Recipe.findAndCountAll({
       include: [Ingredient, {model: User, as: "creator"}, Tag, Comment, {model: User, as: "reactionUser"}],
       distinct: true,
+      offset: offset,
+      limit: limit
       
     });
     return { recipes: rows.map((r) => new RecipeDTO(r)), count };
