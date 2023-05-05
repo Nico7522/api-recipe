@@ -16,7 +16,7 @@ const { CommentDTO } = require("../DTO/comment.dto");
 const recipeService = {
   getAll: async () => {
     const { rows, count } = await db.Recipe.findAndCountAll({
-      include: [Ingredient, {model: User, as: "creator"}, Tag, Comment, {model: User, as: "Users"}],
+      include: [Ingredient, {model: User, as: "creator"}, Tag, Comment, {model: User, as: "reactionUser"}],
       distinct: true,
       
     });
@@ -107,11 +107,10 @@ const recipeService = {
   },
 
   react: async (recipeId, userId, reactionToCreate) => {
-    console.log(userId);
     const transaction = await db.sequelize.transaction();
     let recipe = await db.Recipe.findByPk(recipeId);
     try {
-      await recipe.addUser(
+      await recipe.addReactionUser(
         userId,
         { through: { reaction : reactionToCreate } },
         { transaction }

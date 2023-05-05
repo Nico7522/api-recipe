@@ -23,8 +23,8 @@ db.Ingredient.belongsToMany(db.Recipe, {through: db.MM_Recipe_Ingredient})
 
 
 // Liaison les recipes/users et les réactions
-db.Recipe.belongsToMany(db.User, {through: db.MM_User_React_Recipe})
-db.User.belongsToMany(db.Recipe, {through: db.MM_User_React_Recipe})
+db.Recipe.belongsToMany(db.User, {through: db.MM_User_React_Recipe, as: 'reactionUser' })
+db.User.belongsToMany(db.Recipe, {through: db.MM_User_React_Recipe, as: 'reactionRecipe'})
 
 // Liaison entre les recipes et les tags
 db.Recipe.belongsToMany(db.Tag, {through: "MM_Recipe_Tag"})

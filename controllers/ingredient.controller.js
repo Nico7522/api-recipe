@@ -52,6 +52,7 @@ const ingredientController = {
         res.sendStatus(404);
         return
     }
+    res.location('/ingredient/' + id)
     res.sendStatus(204);
   },
 
