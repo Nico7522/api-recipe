@@ -80,7 +80,7 @@ const recipeController = {
     const data = req.body;
     const recipeUpdated = await recipeService.update(id, data);
     if (!recipeUpdated) {
-      res.sendStatus(404);
+      res.status(404).json('Error, try again');
       return;
     }
     return res.status(201).json(recipeUpdated);

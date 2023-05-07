@@ -83,7 +83,7 @@ const recipeService = {
       }
       await transaction.commit();
       const recipeCreated = await db.Recipe.findByPk(recipe.id, {
-        include: [Ingredient, Tag, User],
+        include: [Ingredient, {model: User, as: "creator"}, Tag, Comment, {model: User, as: "reactionUser"}],
       });
 
       return recipeCreated ? new RecipeDTO(recipeCreated) : null;
@@ -94,6 +94,12 @@ const recipeService = {
   },
 
   update: async (id, changement) => {
+    const check = await db.Recipe.findByPk(id);
+ 
+    if (changement.name === check.dataValues.name) {
+      return null
+    }
+ 
     const recipeToUpdate = await db.Recipe.update(changement, {
       where: { id },
     });
