@@ -39,6 +39,16 @@ const recipeController = {
    * @param {Request} req
    * @param {Response} res
    */
+  getByReact: async (req,res) => {
+    const {id} = req.params
+    const recipes = await recipeService.getByReact(id);
+    res.status(200).json(recipes[0]);
+  },
+
+  /**
+   * @param {Request} req
+   * @param {Response} res
+   */
   Count: async (req, res) => {
     console.log("req query =>", req.query);
     const { name } = req.query;

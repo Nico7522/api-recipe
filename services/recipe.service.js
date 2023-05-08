@@ -17,24 +17,28 @@ const recipeService = {
   getAll: async (offset, limit) => {
     const { rows, count } = await db.Recipe.findAndCountAll({
       include: [Ingredient, {model: User, as: "creator"}, Tag, Comment, {model: User, as: "reactionUser"}],
+      order: [['createdAt', 'DESC']],
       distinct: true,
       offset: offset,
-      limit: limit
+      limit: limit,
+      
       
     });
     return { recipes: rows.map((r) => new RecipeDTO(r)), count };
   },
   getAllRaw: async () => {
     const recipes = await db.Recipe.findAll({
-      include: [{model:Ingredient, as: "Ingredients"},  {model:Tag, as: "Tags"}, {model:Comment, as: "Comments"}, {
-        model: User,
-        as: 'User',
-       
-    }, {model: User, as: "Users"}],
-      
-      
+      include: [Ingredient, {model: User, as: "creator"}, Tag, Comment, {model: User, as: "reactionUser"}],
+
     });
     return recipes.map(r => new RecipeRawDTO(r))
+  },
+
+  getByReact: async (id) => {
+    const react = await db.sequelize.query(`SELECT reaction, COUNT(reaction) as 'number' FROM mm_user_react_recipe WHERE RecipeId = ${id} GROUP BY reaction`)
+    console.log(react)
+
+    return react
   },
 
   Count: async (nameToSearch) => {
@@ -58,7 +62,9 @@ const recipeService = {
   },
 
   getById: async (id) => {
-    const recipe = await db.Recipe.findByPk(id);
+    const recipe = await db.Recipe.findByPk(id, {
+      include: [Ingredient, {model: User, as: "creator"}, Tag, Comment, {model: User, as: "reactionUser"}],
+    });
     return recipe ? new RecipeDTO(recipe) : null;
   },
   create: async (recipeToCreate) => {

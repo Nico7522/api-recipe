@@ -11,6 +11,9 @@ recipeRoute.route('/')
 recipeRoute.route('/react')
 .post(recipeController.react)
 
+recipeRoute.route('/react/:id')
+.get(recipeController.getByReact)
+
 
 recipeRoute.route('/comment')
 .get(commentController.getAll)

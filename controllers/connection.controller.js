@@ -2,6 +2,7 @@ const { Request, Response } = require("express");
 const ConnexionService = require("../services/connection.service");
 const userService = require("../services/user.service");
 const { SuccesResponse } = require("../utils/responses");
+const tokenUtils = require("../utils/token");
 
 const ConnexionController = {
   /**
@@ -11,7 +12,8 @@ const ConnexionController = {
   signup: async (req, res) => {
     const data = req.body;
     const newUser = await ConnexionService.signup(data)
-    res.status(201).json(new SuccesResponse(newUser, 201));
+    const token = await tokenUtils.generate(newUser)
+    res.status(201).json(new SuccesResponse({token, newUser}, 201));
   },
 
   /**
@@ -25,7 +27,8 @@ const ConnexionController = {
         res.sendStatus(404);
         return;
     }
-    res.status(200).json(new SuccesResponse(user))
+    const token = await tokenUtils.generate(user)
+    res.status(200).json(new SuccesResponse({token, user}))
   },
 };
 module.exports = ConnexionController;
