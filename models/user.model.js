@@ -78,7 +78,7 @@ module.exports = (sequelize) => {
             validate: {
                 notNull: true,
                 notEmpty: true,
-                isIn: ["User", "Certified user", "Admin"],
+                isIn: [["User", "Certified user", "Admin"]],
                 len: [1, 14]
             }
         }

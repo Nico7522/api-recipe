@@ -58,6 +58,22 @@ const userController = {
     }
     res.sendStatus(204);
   },
+
+
+ /**
+   * @param {Request} req
+   * @param {Response} res
+   */
+  updateStatus: async(req, res) => {
+    const { id } = req.params;
+    const status = req.body.status;
+    const userToUpdate = await userService.updateStatus(id, status);
+    if (!userToUpdate) {
+      res.sendStatus(404);
+      return;
+    };
+    res.status(201).json(userToUpdate)
+  }
 };
 
 module.exports = userController;
