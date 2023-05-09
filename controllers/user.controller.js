@@ -73,6 +73,22 @@ const userController = {
       return;
     };
     res.status(201).json(userToUpdate)
+  },
+
+  updatePassword: async(req, res) => {
+    const { id } = req.params;
+    const newPassword = req.body.password;
+    console.log(newPassword);
+    const passwordToUpdate = await userService.updatePassword(id, newPassword);
+    if (passwordToUpdate === 0) {
+      res.status(304).json('Password doesn\'t not match the requirements !')
+      return;
+    };
+    if (passwordToUpdate === -1) {
+      res.status(304).json('Password must be different !')
+
+    }
+    res.status(201).json('Password changed')
   }
 };
 

@@ -21,5 +21,6 @@ if (process.env.NODE_ENV === "development") {
 
 appRecipe.use(express.json())
 appRecipe.use('/api', route);
+appRecipe.use(express.static('public'));
 
 appRecipe.listen(process.env.PORT, () => { console.log(`PORT : ${process.env.PORT}`);})

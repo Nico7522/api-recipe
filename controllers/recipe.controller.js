@@ -1,4 +1,5 @@
 const { Request, Response } = require("express");
+const db = require("../models");
 const recipeService = require("../services/recipe.service");
 const {
   SuccesResponse,
@@ -89,10 +90,6 @@ const recipeController = {
     const { id } = req.params;
     const data = req.body;
     const recipeUpdated = await recipeService.update(id, data);
-    if (!recipeUpdated) {
-      res.status(404).json('Error, try again');
-      return;
-    }
     return res.status(201).json(recipeUpdated);
   },
 

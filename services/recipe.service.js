@@ -99,19 +99,17 @@ const recipeService = {
     }
   },
 
-  update: async (id, changement) => {
-    const check = await db.Recipe.findByPk(id);
- 
-    if (changement.name === check.dataValues.name) {
-      return null
-    }
- 
-    const recipeToUpdate = await db.Recipe.update(changement, {
+  update: async (id, change) => {
+    await db.Recipe.update(change, {
       where: { id },
     });
-    const recipeUpdated = await db.Recipe.findByPk(id);
-    return recipeUpdated;
+    const recipeUpdated = await db.Recipe.findByPk(id, {
+      include: [Ingredient, {model: User, as: "creator"}, Tag, Comment, {model: User, as: "reactionUser"}],
+
+    });
+    return new RecipeDTO(recipeUpdated)
   },
+
   delete: async (id) => {
     const isDeleted = await db.Recipe.destroy({
       where: { id },

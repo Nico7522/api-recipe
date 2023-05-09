@@ -11,6 +11,9 @@ userRoute.route('/:id')
 .put(userController.update)
 .patch(userController.updateStatus)
 .delete(userController.delete)
+
+userRoute.route('/:id/resetpassword')
+.patch(userController.updatePassword)
 userRoute.route('/signup')
 .post(ConnexionController.signup)
 
