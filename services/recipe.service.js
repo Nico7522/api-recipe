@@ -15,6 +15,8 @@ const { CommentDTO } = require("../DTO/comment.dto");
 
 const recipeService = {
   getAll: async (offset, limit) => {
+    const trie = await db.sequelize.query('SELECT * FROM Comment ORDER BY createdAt ASC');
+    console.log(trie);
     const { rows, count } = await db.Recipe.findAndCountAll({
       include: [Ingredient, {model: User, as: "creator"}, Tag, Comment, {model: User, as: "reactionUser"}],
       order: [['createdAt', 'DESC']],
