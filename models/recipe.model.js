@@ -27,13 +27,13 @@ module.exports = (sequelize) => {
         },
       },
       image: {
-        type: DataTypes.STRING(50),
+        type: DataTypes.STRING,
         allowNull: false,
         defaultValue: "/images/recipe/recipedefault.jpg",
         validate: {
             notNull: true,
             notEmpty: true,
-            len: [1, 50]
+           
         },
       },
       valid: {

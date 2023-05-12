@@ -1,23 +1,24 @@
 const commentController = require('../controllers/comment.controller');
 const recipeController = require('../controllers/recipe.controller');
 const recipeService = require('../services/recipe.service');
+const recipeRoute = require('express').Router()
 
 const multer = require('multer');
 const uuid = require('uuid');
 const storage = multer.diskStorage({
-    destination: (req, file, callback) => {
-        callback(null, "public/images/recipe")
+    destination: (req, file, cb) => {
+        cb(null, "public/images/recipe")
     },
-    filename: (req, file, callback) => {
-        const name = uuid.v4();
-        const ext = file.originalname.split('.').at(-1);
-        callback(null, name + '.' + ext)
+    filename: (req, file, cb) => {
+        // const name = uuid.v4();
+        // const ext = file.originalname.split('.').at(-1);
+        // console.log(ext);
+        cb(null, file.originalname)
     }
 })
 
 const upload = multer({storage});
 
-const recipeRoute = require('express').Router()
 
 recipeRoute.route('/')
 .get(recipeController.getAll)
@@ -47,5 +48,8 @@ recipeRoute.route('/comment/:id')
 .get(commentController.getById)
 .put(commentController.edit)
 .delete(commentController.delete)
+
+recipeRoute.route('/:id/updateimage')
+.patch(upload.single('image'),recipeController.updateImage)
 
 module.exports = recipeRoute;

@@ -8,19 +8,19 @@ const dataBase = require('./models');
 const route = require('./routes')
 appRecipe.use(cors())
 dataBase.sequelize.authenticate()
-        .then(() => console.log('ok'))
-        .catch((err) => console.log(err))
+.then(() => console.log('ok'))
+.catch((err) => console.log(err))
 
 
 
 if (process.env.NODE_ENV === "development") {
     // dataBase.sequelize.sync({alter : { drop: false}});
     //   dataBase.sequelize.sync({ force: true });
-
+    
 }
+appRecipe.use(express.static('public'));
 
 appRecipe.use(express.json())
 appRecipe.use('/api', route);
-appRecipe.use(express.static('public'));
 
 appRecipe.listen(process.env.PORT, () => { console.log(`PORT : ${process.env.PORT}`);})

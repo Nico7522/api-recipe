@@ -151,6 +151,23 @@ const recipeController = {
     }
     res.sendStatus(204);
   },
+
+  /**
+   * @param {Request} req
+   * @param {Response} res
+   */
+  updateImage: async (req, res) => {
+    const { id } = req.params;
+    const img = req.file.filename;
+    const imageUpdated = await recipeService.updateImage(id, img);
+    if (!imageUpdated) {
+      res.sendStatus(404);
+      return;
+    }
+    res.sendStatus(204)
+  }
+
+
 };
 
 module.exports = recipeController;

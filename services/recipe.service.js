@@ -15,17 +15,16 @@ const { CommentDTO } = require("../DTO/comment.dto");
 
 const recipeService = {
   getAll: async (offset, limit) => {
-    const trie = await db.sequelize.query('SELECT * FROM Comment ORDER BY createdAt ASC');
-    console.log(trie);
+    // const trie = await db.sequelize.query('SELECT * FROM Comment ORDER BY createdAt ASC');
+    // console.log(trie);
     const { rows, count } = await db.Recipe.findAndCountAll({
       include: [Ingredient, {model: User, as: "creator"}, Tag, Comment, {model: User, as: "reactionUser"}],
       order: [['createdAt', 'DESC']],
       distinct: true,
       offset: offset,
       limit: limit,
-      
-      
     });
+    
     return { recipes: rows.map((r) => new RecipeDTO(r)), count };
   },
   getAllRaw: async () => {
@@ -170,6 +169,18 @@ const recipeService = {
       where: { id }
     })
     return isDeleted === 1;
+  },
+
+  updateImage: async(id, img) => {
+    const data = {
+      image: `/images/recipe/${img}`
+    };
+
+    const imageUpdated = await db.Recipe.update(data, {
+      where: { id },
+    })
+    
+    return imageUpdated[0] === 1;
   }
 };
 
