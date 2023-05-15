@@ -15,10 +15,17 @@ class SuccesMultipleResponse  {
     }
 }
 
+class errorResponse {
+    constructor(message, code) {
+        this.message = message,
+        this.code = code
+    }
+}
+
 class CountResponse {
     constructor(count, code = 200){
         this.count = count,
         this.code = code
     }
 }
-module.exports = {SuccesResponse, SuccesMultipleResponse, CountResponse}
+module.exports = {SuccesResponse, SuccesMultipleResponse, CountResponse, errorResponse}

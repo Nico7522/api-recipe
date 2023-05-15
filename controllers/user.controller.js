@@ -4,6 +4,7 @@ const userService = require("../services/user.service");
 const {
   SuccesMultipleResponse,
   SuccesResponse,
+  errorResponse,
 } = require("../utils/responses");
 const argon2 = require("argon2");
 
@@ -80,15 +81,18 @@ const userController = {
     const newPassword = req.body.password;
     console.log(newPassword);
     const passwordToUpdate = await userService.updatePassword(id, newPassword);
-    if (passwordToUpdate === 0) {
-      res.status(304).json('Password doesn\'t not match the requirements !')
-      return;
-    };
-    if (passwordToUpdate === -1) {
-      res.status(304).json('Password must be different !')
+    console.log(passwordToUpdate);
+    // if (passwordToUpdate === 0) {
+    //   res.status(304).json(new errorResponse('Password doesn\'t not match the requirements !', 304))
+    //   return;
+    // };
+    // if (passwordToUpdate === -1) {
+    //   res.status(304).json(new errorResponse('Password must be different !', 304));
+    //   return;
+     
 
-    }
-    res.status(201).json('Password changed')
+    // }
+    res.status(201).json(passwordToUpdate)
   }
 };
 
