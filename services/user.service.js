@@ -16,7 +16,10 @@ const userService = {
     };
   },
   getById: async (id) => {
-    const user = await db.User.findByPk(id);
+    const user = await db.User.findByPk(id, {
+      include: [Recipe],
+
+    });
     return user ? new UserDTO(user) : null;
   },
 

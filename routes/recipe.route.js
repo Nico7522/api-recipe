@@ -2,7 +2,7 @@ const commentController = require('../controllers/comment.controller');
 const recipeController = require('../controllers/recipe.controller');
 const recipeService = require('../services/recipe.service');
 const recipeRoute = require('express').Router()
-
+const { v4: uuidv4 } = require('uuid');
 const multer = require('multer');
 const uuid = require('uuid');
 const storage = multer.diskStorage({
@@ -11,8 +11,10 @@ const storage = multer.diskStorage({
     },
     filename: (req, file, cb) => {
         // const name = uuid.v4();
-        // const ext = file.originalname.split('.').at(-1);
+        const name = uuid.v4()
+        const ext = file.originalname.split('.').at(-1);
         // console.log(ext);
+        
         cb(null, file.originalname)
     }
 })

@@ -18,6 +18,7 @@ class RecipeDTO {
         this.tags = Tags ? Tags.map((t) => t.name) : [],
         this.comments = Comments ? Comments.map((c) => new CommentDTO(c)) : null,
         this.creator = creator ? creator.name: null
+        this.creatorId = creator ? creator.id: null
         this.createdAt = new Date(createdAt).toLocaleString('fr')
     
     }
