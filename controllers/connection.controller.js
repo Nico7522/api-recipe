@@ -11,9 +11,9 @@ const ConnexionController = {
    */
   signup: async (req, res) => {
     const data = req.body;
-    const newUser = await ConnexionService.signup(data)
-    const token = await tokenUtils.generate(newUser)
-    res.status(201).json(new SuccesResponse({token, newUser}, 201));
+    const user = await ConnexionService.signup(data)
+    const token = await tokenUtils.generate(user)
+    res.status(201).json(new SuccesResponse({token, user}, 201));
   },
 
   /**
