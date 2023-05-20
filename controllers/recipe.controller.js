@@ -26,6 +26,15 @@ const recipeController = {
       res.status(200).json(new SuccesMultipleResponse(recipes, count));
     }
   },
+  /**
+   * @param {Request} req
+   * @param {Response} res
+   */
+  getAllPaginated: async (req,res) => {
+    const { page, limit, startIndex, endIndex } = req.pagination
+    const recipes = await recipeService.getAllPaginated(startIndex, endIndex, limit, page)
+    res.status(200).json(new SuccesMultipleResponse(recipes, 0))
+  },
 
   /**
    * @param {Request} req

@@ -27,6 +27,17 @@ const recipeService = {
     
     return { recipes: rows.map((r) => new RecipeDTO(r)), count };
   },
+
+  getAllPaginated: async (startIndex, endIndex, limit, page) => {
+    const recipes = await db.Recipe.findAll({
+      include: [Ingredient, {model: User, as: "creator"}, Tag, Comment, {model: User, as: "reactionUser"}],
+      offset: startIndex,
+      limit: limit
+    })
+    
+    // const recipesPaginated = recipes.slice(startIndex, endIndex)
+    return recipes.map(r => new RecipeDTO(r))
+  },
   getAllRaw: async () => {
     const recipes = await db.Recipe.findAll({
       include: [Ingredient, {model: User, as: "creator"}, Tag, Comment, {model: User, as: "reactionUser"}],
@@ -37,6 +48,7 @@ const recipeService = {
 
   getByReact: async (id) => {
     const react = await db.sequelize.query(`SELECT reaction, COUNT(reaction) as 'number' FROM mm_user_react_recipe WHERE RecipeId = ${id} GROUP BY reaction`)
+    // const react = await db.sequelize.query(`SELECT * FROM mm_user_react_recipe WHERE RecipeId = ${id} and UserId = '1' and reaction = 'like'`)
     console.log(react)
 
     return react

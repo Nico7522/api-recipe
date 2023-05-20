@@ -5,6 +5,7 @@ const recipeRoute = require('express').Router()
 const { v4: uuidv4 } = require('uuid');
 const multer = require('multer');
 const uuid = require('uuid');
+const paginationMiddleware = require('../middlewares/pagination.middleware');
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, "public/images/recipe")
@@ -23,7 +24,7 @@ const upload = multer({storage});
 
 
 recipeRoute.route('/')
-.get(recipeController.getAll)
+.get( paginationMiddleware(3) ,recipeController.getAllPaginated)
 .post(recipeController.create)
 
 recipeRoute.route('/react')
