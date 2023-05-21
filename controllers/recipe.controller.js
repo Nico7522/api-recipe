@@ -32,6 +32,18 @@ const recipeController = {
     res.status(200).json(new SuccesMultipleResponse(recipes, 0))
   },
 
+
+    /**
+   * @param {Request} req
+   * @param {Response} res
+   */
+  getTopRecipe: async (req,res) => {
+     
+      const recipes = await recipeService.getTopRecipe();
+      console.log(recipes);
+      res.status(200).json(recipes)
+    },
+
   /**
    * @param {Request} req
    * @param {Response} res
@@ -50,6 +62,7 @@ const recipeController = {
     const recipes = await recipeService.getByReact(id);
     res.status(200).json(recipes[0]);
   },
+
 
   /**
    * @param {Request} req
