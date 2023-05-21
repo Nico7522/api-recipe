@@ -14,44 +14,110 @@ const { raw } = require("mysql2");
 const { CommentDTO } = require("../DTO/comment.dto");
 
 const recipeService = {
-  getAll: async (offset, limit) => {
-    // const trie = await db.sequelize.query('SELECT * FROM Comment ORDER BY createdAt ASC');
-    // console.log(trie);
-    const { rows, count } = await db.Recipe.findAndCountAll({
-      include: [Ingredient, {model: User, as: "creator"}, Tag, Comment, {model: User, as: "reactionUser"}],
-      order: [['createdAt', 'DESC']],
-      distinct: true,
-      offset: offset,
-      limit: limit,
+  getAll: async () => {
+    const recipes = await db.Recipe.findAll({
+      include: [
+        { model: db.Ingredient },
+        { model: db.User, as: "creator" },
+        { model: db.Tag },
+        { model: db.Comment },
+        { model: db.User, as: "reactionUser", attributes: [] },
+      ],
+      attributes: {
+        include: [
+          [
+            sequelize.fn(
+              "COUNT",
+              sequelize.col("reactionUser.MM_user_react_recipe.reaction")
+            ),
+            "reactionCount",
+          ],
+        ],
+      },
+      order: [[sequelize.literal("reactionCount"), "DESC"]],
+      group: [
+        "Recipe.id",
+        "Ingredients.MM_recipe_ingredient.IngredientId",
+        "creatorId",
+        "Tags.id",
+        "Comments.id",
+        "reactionUser.MM_user_react_recipe.RecipeId",
+      ],
+      // raw: true,
     });
-    
-    return { recipes: rows.map((r) => new RecipeDTO(r)), count };
+
+    return recipes.map((r) => r);
+
+    // const r = await db.sequelize.query(
+    //   `SELECT mm_user_react_recipe.RecipeId, recipe.*, COUNT(mm_user_react_recipe.reaction) as 'number' FROM mm_user_react_recipe JOIN recipe ON mm_user_react_recipe.RecipeId = recipe.id GROUP BY mm_user_react_recipe.RecipeId ORDER BY number DESC `
+    //   , {
+    //     model: Tag,
+    //     mapToModel: true,
+    //     model: User, as: "creator",
+    //     mapToModel: true,
+    //     model: User, as: 'reactionUser',
+    //     mapToModel: true,
+    //     model: Comment,
+    //     mapToModel: true,
+    //     model: Ingredient,
+    //     mapToModel: true,
+    //     raw: true
+    //   },
+
+    // )
+
+    // return r.map((r) => r)
   },
+  // getAll: async (offset, limit) => {
+
+  //   const { rows, count } = await db.Recipe.findAndCountAll({
+  //     include: [Ingredient, {model: User, as: "creator"}, Tag, Comment, {model: User, as: "reactionUser"}],
+  //     order: [['createdAt', 'DESC']],
+  //     distinct: true,
+  //     offset: offset,
+  //     limit: limit,
+  //   });
+
+  //   return { recipes: rows.map((r) => new RecipeDTO(r)), count };
+  // },
 
   getAllPaginated: async (startIndex, endIndex, limit, page) => {
     const recipes = await db.Recipe.findAll({
-      include: [Ingredient, {model: User, as: "creator"}, Tag, Comment, {model: User, as: "reactionUser"}],
+      include: [
+        Ingredient,
+        { model: User, as: "creator" },
+        Tag,
+        Comment,
+        { model: User, as: "reactionUser" },
+      ],
       offset: startIndex,
-      limit: limit
-    })
-    
+      limit: limit,
+    });
+
     // const recipesPaginated = recipes.slice(startIndex, endIndex)
-    return recipes.map(r => new RecipeDTO(r))
+    return recipes.map((r) => new RecipeDTO(r));
   },
   getAllRaw: async () => {
     const recipes = await db.Recipe.findAll({
-      include: [Ingredient, {model: User, as: "creator"}, Tag, Comment, {model: User, as: "reactionUser"}],
-
+      include: [
+        Ingredient,
+        { model: User, as: "creator" },
+        Tag,
+        Comment,
+        { model: User, as: "reactionUser" },
+      ],
     });
-    return recipes.map(r => new RecipeRawDTO(r))
+    return recipes.map((r) => new RecipeRawDTO(r));
   },
 
   getByReact: async (id) => {
-    const react = await db.sequelize.query(`SELECT reaction, COUNT(reaction) as 'number' FROM mm_user_react_recipe WHERE RecipeId = ${id} GROUP BY reaction`)
+    const react = await db.sequelize.query(
+      `SELECT reaction, COUNT(reaction) as 'number' FROM mm_user_react_recipe WHERE RecipeId = ${id} GROUP BY reaction`
+    );
     // const react = await db.sequelize.query(`SELECT * FROM mm_user_react_recipe WHERE RecipeId = ${id} and UserId = '1' and reaction = 'like'`)
-    console.log(react)
+    console.log(react);
 
-    return react
+    return react;
   },
 
   Count: async (nameToSearch) => {
@@ -76,7 +142,13 @@ const recipeService = {
 
   getById: async (id) => {
     const recipe = await db.Recipe.findByPk(id, {
-      include: [Ingredient, {model: User, as: "creator"}, Tag, Comment, {model: User, as: "reactionUser"}],
+      include: [
+        Ingredient,
+        { model: User, as: "creator" },
+        Tag,
+        Comment,
+        { model: User, as: "reactionUser" },
+      ],
     });
     return recipe ? new RecipeDTO(recipe) : null;
   },
@@ -102,7 +174,13 @@ const recipeService = {
       }
       await transaction.commit();
       const recipeCreated = await db.Recipe.findByPk(recipe.id, {
-        include: [Ingredient, {model: User, as: "creator"}, Tag, Comment, {model: User, as: "reactionUser"}],
+        include: [
+          Ingredient,
+          { model: User, as: "creator" },
+          Tag,
+          Comment,
+          { model: User, as: "reactionUser" },
+        ],
       });
 
       return recipeCreated ? new RecipeDTO(recipeCreated) : null;
@@ -117,10 +195,15 @@ const recipeService = {
       where: { id },
     });
     const recipeUpdated = await db.Recipe.findByPk(id, {
-      include: [Ingredient, {model: User, as: "creator"}, Tag, Comment, {model: User, as: "reactionUser"}],
-
+      include: [
+        Ingredient,
+        { model: User, as: "creator" },
+        Tag,
+        Comment,
+        { model: User, as: "reactionUser" },
+      ],
     });
-    return new RecipeDTO(recipeUpdated)
+    return new RecipeDTO(recipeUpdated);
   },
 
   delete: async (id) => {
@@ -137,7 +220,7 @@ const recipeService = {
     try {
       await recipe.addReactionUser(
         userId,
-        { through: { reaction : reactionToCreate } },
+        { through: { reaction: reactionToCreate } },
         { transaction }
       );
 
@@ -154,46 +237,44 @@ const recipeService = {
   },
 
   comment: async (comment) => {
-    
-   
     const user = await db.User.findByPk(comment.UserId);
     comment.name = user.name;
     console.log(comment);
     const commentCreated = await db.Comment.create(comment);
-    const commentCreatedWithUser = await db.Comment.findByPk(commentCreated.id, {
-      include: [User]
-    })
-    return new CommentDTO(commentCreatedWithUser)
-
+    const commentCreatedWithUser = await db.Comment.findByPk(
+      commentCreated.id,
+      {
+        include: [User],
+      }
+    );
+    return new CommentDTO(commentCreatedWithUser);
   },
 
-  getComment: async() => {
+  getComment: async () => {
     const allComments = await db.Comment.findAll({
       include: [User],
-      
     });
     return allComments;
   },
 
-
-  deleteComment: async(id) => {
+  deleteComment: async (id) => {
     const isDeleted = await db.Comment.destroy({
-      where: { id }
-    })
+      where: { id },
+    });
     return isDeleted === 1;
   },
 
-  updateImage: async(id, img) => {
+  updateImage: async (id, img) => {
     const data = {
-      image: `/images/recipe/${img}`
+      image: `/images/recipe/${img}`,
     };
 
     const imageUpdated = await db.Recipe.update(data, {
       where: { id },
-    })
-    
+    });
+
     return imageUpdated[0] === 1;
-  }
+  },
 };
 
 module.exports = recipeService;

@@ -21,10 +21,10 @@ const storage = multer.diskStorage({
 })
 
 const upload = multer({storage});
-
-
+ 
+// paginationMiddleware(3),
 recipeRoute.route('/')
-.get( paginationMiddleware(3) ,recipeController.getAllPaginated)
+.get(recipeController.getAll)
 .post(recipeController.create)
 
 recipeRoute.route('/react')

@@ -16,15 +16,11 @@ const recipeController = {
     if (req.query.offset && req.query.limit) {
       const reqOffset = parseInt(req.query.offset);
       const reqLimit = parseInt(req.query.limit);
-      const { recipes, count } = await recipeService.getAll(
-        reqOffset,
-        reqLimit
-      );
-      res.status(200).json(new SuccesMultipleResponse(recipes, count));
-    } else {
-      const { recipes, count } = await recipeService.getAll();
-      res.status(200).json(new SuccesMultipleResponse(recipes, count));
-    }
+    } 
+    const recipes= await recipeService.getAll(
+    
+    );
+    res.status(200).json(recipes);
   },
   /**
    * @param {Request} req
