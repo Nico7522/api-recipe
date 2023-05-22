@@ -96,6 +96,7 @@ const recipeService = {
         Comment,
         { model: User, as: "reactionUser" },
       ],
+      order: [['createdAt', 'DESC']],
       offset: startIndex,
       limit: limit,
     });

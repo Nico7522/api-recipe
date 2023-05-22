@@ -8,7 +8,7 @@ const createRecipeValidator = yup.object({
     .of(
       yup.object({
         id: yup.number().integer().positive().required(),
-        quantity: yup.number().integer().min(1).max(5).required(),
+        quantity: yup.number().integer().min(1).max(10000).required(),
         unit: yup.string().min(1).max(10).required()
       })
     )
