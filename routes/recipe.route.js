@@ -6,6 +6,8 @@ const { v4: uuidv4 } = require("uuid");
 const multer = require("multer");
 const uuid = require("uuid");
 const paginationMiddleware = require("../middlewares/pagination.middleware");
+const bodyValidator = require("../middlewares/validator");
+const {createRecipeValidator, updateRecipeCoverValidator} = require("../validators/recipe.validator");
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "public/images/recipe");
@@ -25,7 +27,7 @@ const upload = multer({ storage });
 recipeRoute
   .route("/")
   .get(paginationMiddleware(3), recipeController.getAllPaginated)
-  .post(recipeController.create);
+  .post(bodyValidator(createRecipeValidator) ,recipeController.create);
 
 recipeRoute.route("/react").post(recipeController.react);
 
@@ -57,6 +59,6 @@ recipeRoute
 
 recipeRoute
   .route("/:id/updateimage")
-  .patch(upload.single("image"), recipeController.updateImage);
+  .patch(bodyValidator(updateRecipeCoverValidator) ,upload.single("image"), recipeController.updateImage);
 
 module.exports = recipeRoute;

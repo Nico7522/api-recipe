@@ -15,41 +15,64 @@ const { CommentDTO } = require("../DTO/comment.dto");
 
 const recipeService = {
   getAll: async () => {
-  //   const recipes = await db.Recipe.findAll({
-  //     include: [
-  //       { model: db.Ingredient },
-  //       { model: db.User, as: "creator" },
-  //       { model: db.Tag },
-  //       { model: db.Comment },
-  //       { model: db.User, as: "reactionUser"},
-        
+    // const { rows, count } = await db.Recipe.findAndCountAll({
+    //   include: [
+    //     Ingredient,
+    //     { model: User, as: "creator" },
+    //     Tag,
+    //     Comment,
+    //     { model: User, as: "reactionUser" },
+    //   ],
+    //   attributes: {
+    //     include: [
+    //       [
+    //         sequelize.literal(
+    //           `(SELECT COUNT(mm_user_react_recipe.reaction) FROM recipe JOIN mm_user_react_recipe ON recipe.id = mm_user_react_recipe.RecipeId)`
+    //         ),
+    //         "number",
+    //       ],
+    //     ],
+    //   },
 
-  //     ],
-  //     attributes: {
-  //       include: [
-  //         [
-  //           sequelize.fn(
-  //             "COUNT",
-  //             sequelize.col("reactionUser.MM_user_react_recipe.reaction")
-  //           ),
-  //           "reactionCount",
-  //         ],
-  //       ],
-  //     },
-  //     order: [[sequelize.literal("reactionCount"), "DESC"]],
-  //     group: [
-  //       "Recipe.id",
-  //       "Ingredients.MM_recipe_ingredient.IngredientId",
-  //       "creatorId",
-  //       "Tags.id",
-  //       "Comments.id",
-  //       "reactionUser.MM_user_react_recipe.RecipeId",
-  //     ],
-  //     // raw: true,
-  //   });
+    //   order: [["number", "DESC"]],
+    //   group: ["Recipe.id"],
+    // });
 
-  //   return recipes.map((r) => new RecipeDTO(r));
+    // return { recipes: rows.map((r) => r) };
 
+      // const recipes = await db.Recipe.findAll({
+      //   include: [
+      //     { model: db.Ingredient },
+      //     { model: db.User, as: "creator" },
+      //     { model: db.Tag },
+      //     { model: db.Comment },
+      //     { model: db.User, as: "reactionUser"},
+
+      //   ],
+      //   attributes: {
+      //     include: [
+      //       [
+      //         sequelize.fn(
+      //           "COUNT",
+      //           sequelize.col("reactionUser.MM_user_react_recipe.reaction")
+      //         ),
+      //         "reactionCount",
+      //       ],
+      //     ],
+      //   },
+      //   order: [[sequelize.literal("reactionCount"), "DESC"]],
+      //   group: [
+      //     "Recipe.id",
+      //     "Ingredients.MM_recipe_ingredient.IngredientId",
+      //     "creatorId",
+      //     "Tags.id",
+      //     "Comments.id",
+      //     "reactionUser.MM_user_react_recipe.RecipeId",
+      //   ],
+      //   // raw: true,
+      // });
+
+      // return recipes.map((r) => new RecipeDTO(r));
   },
   // getAll: async (offset, limit) => {
 
@@ -95,45 +118,45 @@ const recipeService = {
 
   getTopRecipe: async () => {
     const r = await db.sequelize.query(
-      `SELECT mm_user_react_recipe.RecipeId, recipe.*, COUNT(mm_user_react_recipe.reaction) as 'number' FROM mm_user_react_recipe JOIN recipe ON mm_user_react_recipe.RecipeId = recipe.id GROUP BY mm_user_react_recipe.RecipeId ORDER BY number DESC `
-      , {
+      `SELECT mm_user_react_recipe.RecipeId, recipe.*, COUNT(mm_user_react_recipe.reaction) as 'number' FROM mm_user_react_recipe JOIN recipe ON mm_user_react_recipe.RecipeId = recipe.id GROUP BY mm_user_react_recipe.RecipeId ORDER BY number DESC `,
+      {
         model: Tag,
         mapToModel: true,
-        model: User, as: "creator",
+        model: User,
+        as: "creator",
         mapToModel: true,
-        model: User, as: 'reactionUser',
+        model: User,
+        as: "reactionUser",
         mapToModel: true,
         model: Comment,
         mapToModel: true,
         model: Ingredient,
         mapToModel: true,
-        raw: true
-      },
-
-    )
+        raw: true,
+      }
+    );
     console.log(r);
-     const three = r.slice(0, 3)
-     const data = [];
-     i = 0
-     while (i < 3) {
-       const recipe = await db.Recipe.findByPk(three[i].id, {
-          include: [
-            Ingredient,
-            { model: User, as: "creator" },
-            Tag,
-            Comment,
-            { model: User, as: "reactionUser" },
-          ],
-        })
-        data.push(recipe)
+    const three = r.slice(0, 3);
+    const data = [];
+    i = 0;
+    while (i < 3) {
+      const recipe = await db.Recipe.findByPk(three[i].id, {
+        include: [
+          Ingredient,
+          { model: User, as: "creator" },
+          Tag,
+          Comment,
+          { model: User, as: "reactionUser" },
+        ],
+      });
+      data.push(recipe);
 
-      i++
-     }
-     
-     console.log(data);
-    return data.map(r => new RecipeDTO(r));
+      i++;
+    }
+
+    console.log(data);
+    return data.map((r) => new RecipeDTO(r));
   },
-
 
   getByReact: async (id) => {
     const react = await db.sequelize.query(

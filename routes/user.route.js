@@ -1,5 +1,7 @@
 const ConnexionController = require('../controllers/connection.controller');
 const userController = require('../controllers/user.controller');
+const bodyValidator = require('../middlewares/validator');
+const { registerValidator, loginValidator } = require('../validators/user.validator');
 
 const userRoute = require('express').Router()
 
@@ -15,9 +17,9 @@ userRoute.route('/:id')
 userRoute.route('/:id/resetpassword')
 .patch(userController.updatePassword)
 userRoute.route('/signup')
-.post(ConnexionController.signup)
+.post( bodyValidator(registerValidator) ,ConnexionController.signup)
 
 userRoute.route('/login')
-.post(ConnexionController.login)
+.post(bodyValidator(loginValidator) ,ConnexionController.login)
 
 module.exports = userRoute;
