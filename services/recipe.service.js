@@ -74,18 +74,18 @@ const recipeService = {
 
       // return recipes.map((r) => new RecipeDTO(r));
   },
-  // getAll: async (offset, limit) => {
+  getAll: async (offset, limit) => {
 
-  //   const { rows, count } = await db.Recipe.findAndCountAll({
-  //     include: [Ingredient, {model: User, as: "creator"}, Tag, Comment, {model: User, as: "reactionUser"}],
-  //     order: [['createdAt', 'DESC']],
-  //     distinct: true,
-  //     offset: offset,
-  //     limit: limit,
-  //   });
+    const { rows, count } = await db.Recipe.findAndCountAll({
+      include: [Ingredient, {model: User, as: "creator"}, Tag, Comment, {model: User, as: "reactionUser"}],
+      order: [['createdAt', 'DESC']],
+      distinct: true,
+      offset: offset,
+      limit: limit,
+    });
 
-  //   return { recipes: rows.map((r) => new RecipeDTO(r)), count };
-  // },
+    return { recipes: rows.map((r) => new RecipeDTO(r)), count };
+  },
 
   getAllPaginated: async (startIndex, endIndex, limit, page) => {
     const recipes = await db.Recipe.findAll({

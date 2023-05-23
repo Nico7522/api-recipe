@@ -68,6 +68,7 @@ const userController = {
   updateStatus: async(req, res) => {
     const { id } = req.params;
     const status = req.body.status;
+    console.log(status);
     const userToUpdate = await userService.updateStatus(id, status);
     if (!userToUpdate) {
       res.sendStatus(404);

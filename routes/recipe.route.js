@@ -29,6 +29,9 @@ recipeRoute
   .get(paginationMiddleware(3), recipeController.getAllPaginated)
   .post(bodyValidator(createRecipeValidator) ,recipeController.create);
 
+  recipeRoute.route("/admin")
+  .get(recipeController.getAll);
+
 recipeRoute.route("/react").post(recipeController.react);
 
 recipeRoute.route("/react/:id").get(recipeController.getByReact);
@@ -39,7 +42,6 @@ recipeRoute
   .post(commentController.post)
   .delete(recipeController.deleteComment);
 
-recipeRoute.route("/search").get(recipeController.Count);
 
 recipeRoute.route("/top")
   .get(recipeController.getTopRecipe);
