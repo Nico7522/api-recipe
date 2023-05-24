@@ -28,10 +28,13 @@ recipeRoute
   .route("/")
   .get(paginationMiddleware(3), recipeController.getAllPaginated)
   .post(bodyValidator(createRecipeValidator) ,recipeController.create);
-
-  recipeRoute.route("/admin")
-  .get(recipeController.getAll);
-
+  
+  
+recipeRoute.route("/admin")
+  .get(recipeController.getAllRecipes);
+  
+recipeRoute.route("/admin/:id")
+    .patch(recipeController.updateValidity);
 recipeRoute.route("/react").post(recipeController.react);
 
 recipeRoute.route("/react/:id").get(recipeController.getByReact);

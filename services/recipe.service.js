@@ -33,76 +33,83 @@ const recipeService = {
     //       ],
     //     ],
     //   },
-
     //   order: [["number", "DESC"]],
     //   group: ["Recipe.id"],
     // });
-
     // return { recipes: rows.map((r) => r) };
-
-      // const recipes = await db.Recipe.findAll({
-      //   include: [
-      //     { model: db.Ingredient },
-      //     { model: db.User, as: "creator" },
-      //     { model: db.Tag },
-      //     { model: db.Comment },
-      //     { model: db.User, as: "reactionUser"},
-
-      //   ],
-      //   attributes: {
-      //     include: [
-      //       [
-      //         sequelize.fn(
-      //           "COUNT",
-      //           sequelize.col("reactionUser.MM_user_react_recipe.reaction")
-      //         ),
-      //         "reactionCount",
-      //       ],
-      //     ],
-      //   },
-      //   order: [[sequelize.literal("reactionCount"), "DESC"]],
-      //   group: [
-      //     "Recipe.id",
-      //     "Ingredients.MM_recipe_ingredient.IngredientId",
-      //     "creatorId",
-      //     "Tags.id",
-      //     "Comments.id",
-      //     "reactionUser.MM_user_react_recipe.RecipeId",
-      //   ],
-      //   // raw: true,
-      // });
-
-      // return recipes.map((r) => new RecipeDTO(r));
+    // const recipes = await db.Recipe.findAll({
+    //   include: [
+    //     { model: db.Ingredient },
+    //     { model: db.User, as: "creator" },
+    //     { model: db.Tag },
+    //     { model: db.Comment },
+    //     { model: db.User, as: "reactionUser"},
+    //   ],
+    //   attributes: {
+    //     include: [
+    //       [
+    //         sequelize.fn(
+    //           "COUNT",
+    //           sequelize.col("reactionUser.MM_user_react_recipe.reaction")
+    //         ),
+    //         "reactionCount",
+    //       ],
+    //     ],
+    //   },
+    //   order: [[sequelize.literal("reactionCount"), "DESC"]],
+    //   group: [
+    //     "Recipe.id",
+    //     "Ingredients.MM_recipe_ingredient.IngredientId",
+    //     "creatorId",
+    //     "Tags.id",
+    //     "Comments.id",
+    //     "reactionUser.MM_user_react_recipe.RecipeId",
+    //   ],
+    //   // raw: true,
+    // });
+    // return recipes.map((r) => new RecipeDTO(r));
   },
-  getAll: async (offset, limit) => {
-
+  getAllRecipes: async (tag) => {
     const { rows, count } = await db.Recipe.findAndCountAll({
-      include: [Ingredient, {model: User, as: "creator"}, Tag, Comment, {model: User, as: "reactionUser"}],
-      order: [['createdAt', 'DESC']],
+      include: [
+        Ingredient,
+        { model: User, as: "creator" },
+        { model: Tag, where: { name: tag } },
+        Comment,
+        { model: User, as: "reactionUser" },
+      ],
+      order: [["createdAt", "DESC"]],
       distinct: true,
-      offset: offset,
-      limit: limit,
     });
 
     return { recipes: rows.map((r) => new RecipeDTO(r)), count };
   },
 
-  getAllPaginated: async (startIndex, endIndex, limit, page) => {
+  getAllPaginated: async (startIndex, endIndex, limit, page, tag) => {
+    let whereCondition = {};
+
+    if (tag) {
+      whereCondition = { name: { [Op.eq]: tag } };
+    }
     const recipes = await db.Recipe.findAll({
       include: [
         Ingredient,
         { model: User, as: "creator" },
-        Tag,
+
+        { model: Tag, where: {...whereCondition} },
         Comment,
         { model: User, as: "reactionUser" },
       ],
-      order: [['createdAt', 'DESC']],
+
+      order: [["createdAt", "DESC"]],
+
       offset: startIndex,
       limit: limit,
+      
     });
+    return recipes.map((r) => new RecipeDTO(r));
 
     // const recipesPaginated = recipes.slice(startIndex, endIndex)
-    return recipes.map((r) => new RecipeDTO(r));
   },
   getAllRaw: async () => {
     const recipes = await db.Recipe.findAll({
@@ -323,6 +330,15 @@ const recipeService = {
     });
 
     return imageUpdated[0] === 1;
+  },
+
+  updateValidity: async (id, validity) => {
+    const isValid = await db.Recipe.upsert({
+      id: id,
+      valid: validity,
+    });
+
+    return isValid;
   },
 };
 

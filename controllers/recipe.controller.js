@@ -11,24 +11,22 @@ const recipeController = {
    * @param {Request} req
    * @param {Response} res
    */
-  getAll: async (req, res) => {
-    console.log(req.query);
-    if (req.query.offset && req.query.limit) {
-      const reqOffset = parseInt(req.query.offset);
-      const reqLimit = parseInt(req.query.limit);
-    } 
-    const recipes= await recipeService.getAll(
-    
-    );
-    res.status(200).json(recipes);
+  getAllRecipes: async (req, res) => {
+    const tag = req.query.tag 
+    console.log(tag);
+    const {recipes, count}= await recipeService.getAllRecipes(tag);
+    res.status(200).json(new SuccesMultipleResponse(recipes, count));
   },
   /**
    * @param {Request} req
    * @param {Response} res
    */
   getAllPaginated: async (req,res) => {
+    const tag = req.query.tag
+  
+ 
     const { page, limit, startIndex, endIndex } = req.pagination
-    const recipes = await recipeService.getAllPaginated(startIndex, endIndex, limit, page)
+    const recipes = await recipeService.getAllPaginated(startIndex, endIndex, limit, page, tag)
     res.status(200).json(new SuccesMultipleResponse(recipes, 0))
   },
 
@@ -179,6 +177,17 @@ const recipeController = {
     const img = req.file.filename;
     const imageUpdated = await recipeService.updateImage(id, img);
     if (!imageUpdated) {
+      res.sendStatus(404);
+      return;
+    }
+    res.sendStatus(204)
+  },
+
+  updateValidity: async (req,res) => {
+    const { id } = req.params;
+    const validity = req.body.valid;
+    const changeValidity = await recipeService.updateValidity(id, validity);
+    if (!changeValidity) {
       res.sendStatus(404);
       return;
     }
