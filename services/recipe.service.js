@@ -86,10 +86,12 @@ const recipeService = {
   },
 
   getAllPaginated: async (startIndex, endIndex, limit, page, tag) => {
+    console.log(tag);
     let whereCondition = {};
 
     if (tag) {
-      whereCondition = { name: { [Op.eq]: tag } };
+      Array.isArray(tag) && (whereCondition = { name: { [Op.in]: tag } });
+      !Array.isArray(tag) && (whereCondition = { name: { [Op.like]: tag } })
     }
     const recipes = await db.Recipe.findAll({
       include: [
