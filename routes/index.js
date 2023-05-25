@@ -8,7 +8,7 @@ const tagRoute = require('./tag.route');
 
 route.use('/recipe', recipeRoute);
 route.use('/user', userRoute);
-// route.use('/comment', commentRoute);
+route.use('/comment', commentRoute);
 route.use('/ingredient', ingredientRoute);
 route.use('/tag', tagRoute);
 

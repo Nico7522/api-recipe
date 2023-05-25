@@ -12,9 +12,9 @@ const recipeController = {
    * @param {Response} res
    */
   getAllRecipes: async (req, res) => {
-    const tag = req.query.tag 
-    console.log(tag);
-    const {recipes, count}= await recipeService.getAllRecipes(tag);
+   
+    
+    const {recipes, count}= await recipeService.getAllRecipes();
     res.status(200).json(new SuccesMultipleResponse(recipes, count));
   },
   /**
@@ -23,10 +23,10 @@ const recipeController = {
    */
   getAllPaginated: async (req,res) => {
     const tag = req.query.tag
-  
+    const nameRecipe = req.query.name
  
     const { page, limit, startIndex, endIndex } = req.pagination
-    const recipes = await recipeService.getAllPaginated(startIndex, endIndex, limit, page, tag)
+    const recipes = await recipeService.getAllPaginated(startIndex, endIndex, limit, page, tag, nameRecipe)
     res.status(200).json(new SuccesMultipleResponse(recipes, 0))
   },
 
