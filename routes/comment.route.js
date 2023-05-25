@@ -1,11 +1,15 @@
 const commentController = require('../controllers/comment.controller');
 const recipeController = require('../controllers/recipe.controller');
+const paginationMiddleware = require('../middlewares/pagination.middleware');
 
 const commentRoute = require('express').Router();
 
 
 commentRoute.route('/')
-.get(commentController.getAll)
+.get(paginationMiddleware(25),commentController.getAllAdmin)
+
+commentRoute.route('/:id')
+.patch(commentController.validComment)
 
 
 module.exports = commentRoute;
