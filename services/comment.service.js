@@ -1,6 +1,7 @@
 const { CommentDTO } = require("../DTO/comment.dto");
 const { User, Recipe, sequelize } = require("../models");
 const db = require("../models");
+const { QueryTypes } = require('sequelize');
 
 const commentService = {
   getAll: async () => {
@@ -11,15 +12,23 @@ const commentService = {
     return comments.map((c) => new CommentDTO(c));
   },
 
-  getAllAdmin: async () => {
-    const AllComments = await db.sequelize.query(
-        `SELECT comment.id as "comment_id", comment.text, comment.valid as "valid", user.id as "user_id", user.name as "user_name", recipe.id as "recipe_id", recipe.name as "recipe_name" FROM comment LEFT JOIN recipe ON comment.RecipeId = recipe.id LEFT JOIN user ON comment.UserId = user.id`,
-        {
-          type: db.sequelize.QueryTypes.SELECT,
-        
-        }
-      );
-    return AllComments
+  getAllAdmin: async (limit, startIndex) => {
+    
+    // const AllComments = await db.sequelize.query(
+    //     `SELECT comment.id as "comment_id", comment.text, comment.valid as "valid", user.id as "user_id", user.name as "user_name", recipe.id as "recipe_id", recipe.name as "recipe_name" FROM comment LEFT JOIN recipe ON comment.RecipeId = recipe.id LEFT JOIN user ON comment.UserId = user.id `,
+    //     {
+    //       type: db.sequelize.QueryTypes.SELECT,
+           
+    //     }
+    //   );
+    // return AllComments
+    const comments = await db.Comment.findAll({
+        include: [User, Recipe],
+        offset: startIndex,
+        limit: limit
+      });
+      
+      return comments.map((c) => new CommentDTO(c));
   },
 
   getById: async (id) => {

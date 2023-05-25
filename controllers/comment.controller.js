@@ -6,6 +6,7 @@ const {
   SuccesResponse,
 } = require("../utils/responses");
 
+
 const commentController = {
   /**
    * @param {Request} req
@@ -20,7 +21,10 @@ const commentController = {
    * @param {Response} res
    */
   getAllAdmin: async (req, res) => {
-    const allComments = await commentService.getAllAdmin();
+
+    const { page, limit, startIndex, endIndex } = req.pagination
+
+    const allComments = await commentService.getAllAdmin(limit, startIndex);
     res.status(200).json(allComments);
   },
 
