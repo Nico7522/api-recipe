@@ -112,12 +112,16 @@ const recipeService = {
         Ingredient,
         { model: User, as: "creator" },
 
-        { model: Tag, where: { ...whereConditionTags } },
+        { model: Tag, where: { ...whereConditionTags }},
         Comment,
         { model: User, as: "reactionUser" },
       ],
 
-      order: [["createdAt", "DESC"]],
+      order: [["createdAt", "DESC"],
+      [{model: Tag}, "createdAt", "DESC"],
+      [{model: Ingredient}, "createdAt", "DESC"],
+      [{model: Comment}, "createdAt", "ASC"]
+    ],
       where: {
         ...whereConditionName,
       },
