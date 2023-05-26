@@ -74,51 +74,60 @@ const recipeService = {
       include: [
         Ingredient,
         { model: User, as: "creator" },
-        { model: Tag},
+        { model: Tag },
         Comment,
         { model: User, as: "reactionUser" },
       ],
       order: [["createdAt", "DESC"]],
-      where: {name:{ [Op.startsWith]: name}},
+      where: { name: { [Op.startsWith]: name } },
       distinct: true,
     });
 
     return { recipes: rows.map((r) => new RecipeDTO(r)), count };
   },
 
-  getAllPaginated: async (startIndex, endIndex, limit, page, tag, nameRecipe) => {
-    
+  getAllPaginated: async (
+    startIndex,
+    endIndex,
+    limit,
+    page,
+    tag,
+    nameRecipe
+  ) => {
     let whereConditionTags = {};
     let whereConditionName = {};
 
     if (tag) {
       Array.isArray(tag) && (whereConditionTags = { name: { [Op.in]: tag } });
-      !Array.isArray(tag) && (whereConditionTags = { name: { [Op.like]: tag } })
+
+      !Array.isArray(tag) &&
+        (whereConditionTags = { name: { [Op.startsWith]: tag } });
     }
     if (nameRecipe) {
-      whereConditionName = { name: { [Op.startsWith]: nameRecipe } }
+      whereConditionName = { name: { [Op.startsWith]: nameRecipe } };
     }
-    console.log(whereConditionName);
+    
     const recipes = await db.Recipe.findAll({
       include: [
         Ingredient,
         { model: User, as: "creator" },
 
-        { model: Tag, where: {...whereConditionTags} },
+        { model: Tag, where: { ...whereConditionTags } },
         Comment,
         { model: User, as: "reactionUser" },
       ],
 
       order: [["createdAt", "DESC"]],
-      where: {...whereConditionName},
+      where: {
+        ...whereConditionName,
+      },
 
       offset: startIndex,
       limit: limit,
-      
     });
     return recipes.map((r) => new RecipeDTO(r));
 
-    // const recipesPaginated = recipes.slice(startIndex, endIndex)
+
   },
   getAllRaw: async () => {
     const recipes = await db.Recipe.findAll({
@@ -310,7 +319,6 @@ const recipeService = {
       commentCreated.id,
       {
         include: [User, Recipe],
-        
       }
     );
     return new CommentDTO(commentCreatedWithUser);
