@@ -13,8 +13,8 @@ const recipeController = {
    */
   getAllRecipes: async (req, res) => {
    
-    
-    const {recipes, count}= await recipeService.getAllRecipes();
+    const { page, limit, startIndex, endIndex } = req.pagination
+    const {recipes, count}= await recipeService.getAllRecipes(startIndex, endIndex, limit, page);
     res.status(200).json(new SuccesMultipleResponse(recipes, count));
   },
   /**

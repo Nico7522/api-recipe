@@ -69,7 +69,10 @@ const recipeService = {
     // });
     // return recipes.map((r) => new RecipeDTO(r));
   },
-  getAllRecipes: async (name) => {
+  getAllRecipes: async (startIndex,
+    endIndex,
+    limit,
+    page) => {
     const { rows, count } = await db.Recipe.findAndCountAll({
       include: [
         Ingredient,
@@ -81,6 +84,8 @@ const recipeService = {
       order: [["createdAt", "DESC"]],
      
       distinct: true,
+      offset: startIndex,
+      limit: limit
     });
 
     return { recipes: rows.map((r) => new RecipeDTO(r)), count };

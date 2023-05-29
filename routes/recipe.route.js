@@ -31,7 +31,7 @@ recipeRoute
   
   
 recipeRoute.route("/admin")
-  .get(recipeController.getAllRecipes);
+  .get(paginationMiddleware(12) ,recipeController.getAllRecipes);
   
 recipeRoute.route("/admin/:id")
     .patch(recipeController.updateValidity);
