@@ -79,7 +79,7 @@ const recipeService = {
         { model: User, as: "reactionUser" },
       ],
       order: [["createdAt", "DESC"]],
-      where: { name: { [Op.startsWith]: name } },
+     
       distinct: true,
     });
 
