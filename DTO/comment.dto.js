@@ -8,6 +8,7 @@ class CommentDTO {
         this.userName = name ? name : null;
         this.createdAt = new Date(createdAt).toLocaleString('fr')
         this.recipeId = Recipe ? Recipe.id: null
+        this.recipeName = Recipe ? Recipe.name : null
     }
 }
 

@@ -6,7 +6,7 @@ const commentRoute = require('express').Router();
 
 
 commentRoute.route('/')
-.get(paginationMiddleware(26),commentController.getAllAdmin)
+.get(paginationMiddleware(24),commentController.getAllAdmin)
 
 commentRoute.route('/:id')
 .patch(commentController.validComment)
