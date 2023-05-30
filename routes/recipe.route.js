@@ -2,27 +2,18 @@ const commentController = require("../controllers/comment.controller");
 const recipeController = require("../controllers/recipe.controller");
 const recipeService = require("../services/recipe.service");
 const recipeRoute = require("express").Router();
-const { v4: uuidv4 } = require("uuid");
-const multer = require("multer");
+
+
 const uuid = require("uuid");
 const paginationMiddleware = require("../middlewares/pagination.middleware");
 const bodyValidator = require("../middlewares/validator");
 const {createRecipeValidator, updateRecipeCoverValidator} = require("../validators/recipe.validator");
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "public/images/recipe");
-  },
-  filename: (req, file, cb) => {
-    // const name = uuid.v4();
-    const name = uuid.v4();
-    const ext = file.originalname.split(".").at(-1);
-    // console.log(ext);
 
-    cb(null, file.originalname);
-  },
-});
+const multer = require('multer');
+const storage = require('../utils/multer')('recipe');
+const upload = multer({storage})
 
-const upload = multer({ storage });
+
 
 recipeRoute
   .route("/")
@@ -30,12 +21,12 @@ recipeRoute
   .post(bodyValidator(createRecipeValidator) ,recipeController.create);
   
   
+recipeRoute.route("/react").post(recipeController.react);
 recipeRoute.route("/admin")
   .get(paginationMiddleware(12) ,recipeController.getAllRecipes);
   
 recipeRoute.route("/admin/:id")
     .patch(recipeController.updateValidity);
-recipeRoute.route("/react").post(recipeController.react);
 
 recipeRoute.route("/react/:id").get(recipeController.getByReact);
 
