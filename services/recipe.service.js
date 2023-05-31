@@ -69,10 +69,7 @@ const recipeService = {
     // });
     // return recipes.map((r) => new RecipeDTO(r));
   },
-  getAllRecipes: async (startIndex,
-    endIndex,
-    limit,
-    page) => {
+  getAllRecipes: async (startIndex, endIndex, limit, page) => {
     const { rows, count } = await db.Recipe.findAndCountAll({
       include: [
         Ingredient,
@@ -82,10 +79,10 @@ const recipeService = {
         { model: User, as: "reactionUser" },
       ],
       order: [["createdAt", "DESC"]],
-     
+
       distinct: true,
       offset: startIndex,
-      limit: limit
+      limit: limit,
     });
 
     return { recipes: rows.map((r) => new RecipeDTO(r)), count };
@@ -111,22 +108,23 @@ const recipeService = {
     if (nameRecipe) {
       whereConditionName = { name: { [Op.startsWith]: nameRecipe } };
     }
-    
+
     const recipes = await db.Recipe.findAll({
       include: [
         Ingredient,
         { model: User, as: "creator" },
 
-        { model: Tag, where: { ...whereConditionTags }},
+        { model: Tag, where: { ...whereConditionTags } },
         Comment,
         { model: User, as: "reactionUser" },
       ],
 
-      order: [["createdAt", "DESC"],
-      [{model: Tag}, "createdAt", "DESC"],
-      [{model: Ingredient}, "createdAt", "DESC"],
-      [{model: Comment}, "createdAt", "ASC"]
-    ],
+      order: [
+        ["createdAt", "DESC"],
+        [{ model: Tag }, "createdAt", "DESC"],
+        [{ model: Ingredient }, "createdAt", "DESC"],
+        [{ model: Comment }, "createdAt", "ASC"],
+      ],
       where: {
         ...whereConditionName,
       },
@@ -135,8 +133,6 @@ const recipeService = {
       limit: limit,
     });
     return recipes.map((r) => new RecipeDTO(r));
-
-
   },
   getAllRaw: async () => {
     const recipes = await db.Recipe.findAll({
@@ -167,14 +163,20 @@ const recipeService = {
         mapToModel: true,
         model: Ingredient,
         mapToModel: true,
-        raw: true,
       }
     );
-    console.log(r);
-    const three = r.slice(0, 3);
+    let three;
+    if (r.length >= 3) {
+      three = r.slice(0, 3);
+      
+    } else {
+      three = r
+
+    }
+    
     const data = [];
     i = 0;
-    while (i < 3) {
+    while (i < three.length) {
       const recipe = await db.Recipe.findByPk(three[i].id, {
         include: [
           Ingredient,
@@ -189,7 +191,7 @@ const recipeService = {
       i++;
     }
 
-    console.log(data);
+
     return data.map((r) => new RecipeDTO(r));
   },
 
@@ -292,6 +294,7 @@ const recipeService = {
   delete: async (id) => {
     const isDeleted = await db.Recipe.destroy({
       where: { id },
+      
     });
 
     return isDeleted === 1;

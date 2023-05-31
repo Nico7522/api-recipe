@@ -44,14 +44,30 @@ module.exports = (sequelize) => {
           notNull: true,
           notEmpty: true,
           isIn: [[true, false]],
+          
         },
+        
       },
+      // comments: {
+      //   type: DataTypes.INTEGER,
+      //   references: {
+      //       model: 'Comments',
+      //       key: 'id'
+      //     },
+      //     onDelete: 'CASCADE'
+      // },
+  
+     
+     
       // ingredients[]
       // comments[]
     },
     {
       tableName: "Recipe",
-    }
+      
+      
+    },
+   
   );
   return Recipe;
 };

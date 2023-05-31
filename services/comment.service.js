@@ -73,11 +73,16 @@ const commentService = {
   },
 
   validComment: async (id, validity) => {
-    const isValid = await db.Comment.upsert({
-        id :id,
-        valid: validity
+    const isValid = await db.Comment.update({
+      valid: validity
+    },
+    {
+        where: { id: id }
     });
-
+    if (isValid) {
+      const newUpdate = await db.Comment.findByPk(id);
+      return new CommentDTO(newUpdate)
+    }
     return isValid
   }
 };

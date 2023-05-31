@@ -89,11 +89,13 @@ const commentController = {
     const validity = req.body.valid;
 
     const isValid = await commentService.validComment(id, validity);
+   
     if (!isValid) {
       res.sendStatus(404);
       return;
     }
-    res.sendStatus(204)
+
+    res.status(201).json(new SuccesResponse(isValid, 200))
   },
 };
 
