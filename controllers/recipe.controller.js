@@ -191,7 +191,7 @@ const recipeController = {
       res.sendStatus(404);
       return;
     }
-    res.sendStatus(204)
+    res.status(200).json(new SuccesResponse(changeValidity, 200))
   }
 
 

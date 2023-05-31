@@ -363,12 +363,15 @@ const recipeService = {
   },
 
   updateValidity: async (id, validity) => {
-    const isValid = await db.Recipe.upsert({
-      id: id,
-      valid: validity,
+    const isValid = await db.Recipe.update({valid: validity},{
+      where : { id: id}
     });
 
-    return isValid;
+    if (isValid) {
+      const newUpdate = await db.Recipe.findByPk(id);
+      return new RecipeDTO(newUpdate)
+    }
+    return isValid
   },
 };
 
