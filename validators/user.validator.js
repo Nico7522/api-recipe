@@ -18,4 +18,8 @@ const loginValidator = yup.object({
 
 })
 
-module.exports = {registerValidator, loginValidator}
+const changeUserStatusValidator = yup.object({
+  status: yup.string().oneOf(["User", "Certified user", "Admin"], "Not a correct status").required()
+})
+
+module.exports = {registerValidator, loginValidator, changeUserStatusValidator}

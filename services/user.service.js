@@ -40,12 +40,15 @@ const userService = {
   },
 
   updateStatus: async (id, status) => {
-    const user = await db.User.upsert({
-      id: id,
-      status: status,
+    const user = await db.User.update({status: status},{
+      where: {id: id}
     });
-
-    return user;
+    if (user) {
+      const newUpdate = await db.Recipe.findByPk(id);
+      return new UserDTO(newUpdate)
+    }
+    return user
+   
   },
 
   updatePassword: async (id, newPassword) => {

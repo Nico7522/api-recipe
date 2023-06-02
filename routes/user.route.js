@@ -1,7 +1,7 @@
 const ConnexionController = require('../controllers/connection.controller');
 const userController = require('../controllers/user.controller');
 const bodyValidator = require('../middlewares/validator');
-const { registerValidator, loginValidator } = require('../validators/user.validator');
+const { registerValidator, loginValidator, changeUserStatusValidator } = require('../validators/user.validator');
 
 const userRoute = require('express').Router()
 
@@ -11,7 +11,7 @@ userRoute.route('/')
 userRoute.route('/:id')
 .get(userController.GetById)
 .put(userController.update)
-.patch(userController.updateStatus)
+.patch(bodyValidator(changeUserStatusValidator),userController.updateStatus)
 .delete(userController.delete)
 
 userRoute.route('/:id/resetpassword')

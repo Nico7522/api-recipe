@@ -9,7 +9,7 @@ const createIngredientValidator = yup.object({
 })
 
 const updateIngredientValidator = yup.object({
-    name: yup.string().min(1).max(50).required(),
+    name: yup.string().min(1).max(50).trim().required(),
     calorie: yup.number().min(1).max(10000).positive().required(),
     carbohydrate: yup.number().min(1).max(1000).positive().required(),
     fats: yup.number().min(1).max(1000).positive().required(),
