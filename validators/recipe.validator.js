@@ -30,7 +30,11 @@ const updateRecipeCoverValidator = yup.object({
     image: yup.mixed()
 });
 
-module.exports = {createRecipeValidator, updateRecipeCoverValidator};
+const updateValidityValidator = yup.object({
+  valid: yup.boolean().required()
+})
+
+module.exports = {createRecipeValidator, updateRecipeCoverValidator, updateValidityValidator};
 
 
 

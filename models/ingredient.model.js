@@ -26,7 +26,7 @@ module.exports = (sequelize) => {
           max: 10000,
           notNull: true,
           notEmpty: true,
-          len: [1, 5],
+          len: [1, 7],
         },
       },
       carbohydrates: {
