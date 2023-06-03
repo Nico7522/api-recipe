@@ -44,7 +44,7 @@ const userService = {
       where: {id: id}
     });
     if (user) {
-      const newUpdate = await db.Recipe.findByPk(id);
+      const newUpdate = await db.User.findByPk(id);
       return new UserDTO(newUpdate)
     }
     return user

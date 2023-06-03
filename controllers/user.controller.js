@@ -74,7 +74,7 @@ const userController = {
       res.sendStatus(404);
       return;
     };
-    res.status(201).json(userToUpdate)
+    res.status(201).json(new SuccesResponse(userToUpdate, 200))
   },
 
   updatePassword: async(req, res) => {
