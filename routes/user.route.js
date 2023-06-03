@@ -1,12 +1,13 @@
 const ConnexionController = require('../controllers/connection.controller');
 const userController = require('../controllers/user.controller');
+const paginationMiddleware = require('../middlewares/pagination.middleware');
 const bodyValidator = require('../middlewares/validator');
 const { registerValidator, loginValidator, changeUserStatusValidator } = require('../validators/user.validator');
 
 const userRoute = require('express').Router()
 
 userRoute.route('/')
-.get(userController.GetAll)
+.get(paginationMiddleware(2),userController.GetAll)
 
 userRoute.route('/:id')
 .get(userController.GetById)

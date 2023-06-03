@@ -5,10 +5,12 @@ const { Recipe } = require("../models");
 const { where } = require("sequelize");
 
 const userService = {
-  getAll: async () => {
+  getAll: async (startIndex, endIndex, limit, page) => {
     const { rows, count } = await db.User.findAndCountAll({
       include: [Recipe],
       distinct: true,
+      offset: startIndex,
+      limit: limit,
     });
     return {
       users: rows.map((u) => new UserDTO(u)),
