@@ -1,9 +1,16 @@
+const { Op } = require('sequelize');
 const { IngredientDTO } = require('../DTO/ingredient.dto');
 const db = require('../models');
 
 const ingredientService = {
-    getAll: async () => {
+    getAll: async (ingredient) => {
+        let whereConditionIngredient = {};
+        if (ingredient) {
+            whereConditionIngredient = { name: { [Op.startsWith]: ingredient }}
+            console.log(ingredient);
+        }
         const {rows, count } = await db.Ingredient.findAndCountAll({
+            where: {...whereConditionIngredient},
             distinct: true
         });
         return {

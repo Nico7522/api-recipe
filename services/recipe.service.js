@@ -94,10 +94,12 @@ const recipeService = {
     limit,
     page,
     tag,
-    nameRecipe
+    nameRecipe,
+    ingredients
   ) => {
     let whereConditionTags = {};
     let whereConditionName = {};
+    let whereConditionIngredients = {};
 
     if (tag) {
       Array.isArray(tag) && (whereConditionTags = { name: { [Op.in]: tag } });
@@ -108,10 +110,14 @@ const recipeService = {
     if (nameRecipe) {
       whereConditionName = { name: { [Op.startsWith]: nameRecipe } };
     }
+    if (ingredients) {
+      Array.isArray(ingredients) && (whereConditionIngredients = { name: { [Op.in]: ingredients}});
+      !Array.isArray(ingredients) && (whereConditionIngredients = { name: { [Op.startsWith]: tag }});
+    }
 
     const recipes = await db.Recipe.findAll({
       include: [
-        Ingredient,
+        {model: Ingredient, where: {...whereConditionIngredients }},
         { model: User, as: "creator" },
 
         { model: Tag, where: { ...whereConditionTags } },

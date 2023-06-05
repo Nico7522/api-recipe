@@ -19,6 +19,9 @@ recipeRoute
   .route("/")
   .get(paginationMiddleware(3), recipeController.getAllPaginated)
   .post(bodyValidator(createRecipeValidator) ,recipeController.create);
+  recipeRoute
+    .route("/:id/updateimage")
+    .patch(bodyValidator(updateRecipeCoverValidator) ,upload.single("image"), recipeController.updateImage);
   
   recipeRoute.route("/top")
   .get(recipeController.getTopRecipe);
@@ -54,8 +57,5 @@ recipeRoute
   .delete(commentController.delete);
 
 
-recipeRoute
-  .route("/:id/updateimage")
-  .patch(bodyValidator(updateRecipeCoverValidator) ,upload.single("image"), recipeController.updateImage);
 
 module.exports = recipeRoute;

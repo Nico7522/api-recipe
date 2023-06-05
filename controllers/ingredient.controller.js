@@ -9,7 +9,8 @@ const ingredientController = {
    */
 
   getAll: async (req, res) => {
-    const { ingredients, count } = await ingredientService.getAll();
+    const { ingredient } = req.query
+    const { ingredients, count } = await ingredientService.getAll(ingredient);
     res.status(200).json(new SuccesMultipleResponse(ingredients, count))
   },
 
