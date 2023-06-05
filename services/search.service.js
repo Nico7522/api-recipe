@@ -3,14 +3,25 @@ const { RecipeDTO } = require("../DTO/recipe.dto");
 const db = require("../models");
 
 const searchService = {
-  getAll: async (tag, recipe) => {
-    console.log(tag);
-    const tagsCondition = tag ? { name: Array.isArray(tag) ? { [Op.in]: tag } : tag } : {};
+  getAll: async (tag, recipe, ingredient) => {
+    console.log( "ingre", ingredient);
+    console.log('tag', tag);
+    const tagsCondition = tag
+      ? { name: Array.isArray(tag) ? { [Op.in]: tag } : tag }
+      : {};
     const recipeCondition = recipe ? { name: { [Op.startsWith]: recipe } } : {};
+    const ingredientsCondition = ingredient
+      ? {
+          name: Array.isArray(ingredient)
+            ? { [Op.in]: ingredient }
+            : { [Op.startsWith]: ingredient},
+            
+        }
+      : {};
 
     const recipes = await db.Recipe.findAll({
       include: [
-        { model: db.Ingredient },
+        { model: db.Ingredient, where:  ingredientsCondition },
         { model: db.User, as: "creator" },
 
         { model: db.Tag, where: tagsCondition },

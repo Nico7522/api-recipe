@@ -111,16 +111,20 @@ const recipeService = {
       whereConditionName = { name: { [Op.startsWith]: nameRecipe } };
     }
     if (ingredients) {
-      Array.isArray(ingredients) && (whereConditionIngredients = { name: { [Op.in]: ingredients}});
-      !Array.isArray(ingredients) && (whereConditionIngredients = { name: { [Op.startsWith]: tag }});
+      Array.isArray(ingredients) &&
+        (whereConditionIngredients = { name: { [Op.in]: ingredients } });
+      !Array.isArray(ingredients) &&
+        (whereConditionIngredients = {
+          name: { [Op.startsWith]: ingredients },
+        });
     }
 
     const recipes = await db.Recipe.findAll({
       include: [
-        {model: Ingredient, where: {...whereConditionIngredients }},
+        { model: Ingredient, where: whereConditionIngredients },
         { model: User, as: "creator" },
 
-        { model: Tag, where: { ...whereConditionTags } },
+        { model: Tag, where: whereConditionTags },
         Comment,
         { model: User, as: "reactionUser" },
       ],
@@ -131,12 +135,11 @@ const recipeService = {
         [{ model: Ingredient }, "createdAt", "DESC"],
         [{ model: Comment }, "createdAt", "ASC"],
       ],
-      where: {
-        ...whereConditionName,
-      },
+      where: whereConditionName,
 
       offset: startIndex,
       limit: limit,
+      distinct: true,
     });
     return recipes.map((r) => new RecipeDTO(r));
   },
@@ -174,12 +177,10 @@ const recipeService = {
     let three;
     if (r.length >= 3) {
       three = r.slice(0, 3);
-      
     } else {
-      three = r
-
+      three = r;
     }
-    
+
     const data = [];
     i = 0;
     while (i < three.length) {
@@ -196,7 +197,6 @@ const recipeService = {
 
       i++;
     }
-
 
     return data.map((r) => new RecipeDTO(r));
   },
@@ -300,7 +300,6 @@ const recipeService = {
   delete: async (id) => {
     const isDeleted = await db.Recipe.destroy({
       where: { id },
-      
     });
 
     return isDeleted === 1;
@@ -369,15 +368,18 @@ const recipeService = {
   },
 
   updateValidity: async (id, validity) => {
-    const isValid = await db.Recipe.update({valid: validity},{
-      where : { id: id}
-    });
+    const isValid = await db.Recipe.update(
+      { valid: validity },
+      {
+        where: { id: id },
+      }
+    );
 
     if (isValid) {
       const newUpdate = await db.Recipe.findByPk(id);
-      return new RecipeDTO(newUpdate)
+      return new RecipeDTO(newUpdate);
     }
-    return isValid
+    return isValid;
   },
 };
 

@@ -14,9 +14,11 @@ const searchController = {
    * @param {Response} res
    */
    getAll: async (req, res) => {
+    console.log(req.query);
     const { tag } = req.query
     const recipe = req.query.name
-    const recipes = await searchService.getAll(tag, recipe);
+    const { ingredient } = req.query
+    const recipes = await searchService.getAll(tag, recipe, ingredient);
     res.status(200).json(recipes)
    } 
 }
