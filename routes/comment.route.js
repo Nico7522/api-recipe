@@ -11,5 +11,8 @@ commentRoute.route('/')
 commentRoute.route('/:id')
 .patch(commentController.validComment)
 
+commentRoute.route('/:id')
+.delete(commentController.delete)
+
 
 module.exports = commentRoute;
