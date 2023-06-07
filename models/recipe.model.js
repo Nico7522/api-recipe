@@ -9,17 +9,17 @@ module.exports = (sequelize) => {
     "Recipe",
     {
       name: {
-        type: DataTypes.STRING(50),
+        type: DataTypes.STRING(100),
         allowNull: false,
         unique: "UK_recipe_name",
         validate: {
           notNull: true,
           notEmpty: true,
-          len: [1, 50],
+          len: [1, 100],
         },
       },
       description: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT('long'),
         allowNull: false,
         validate: {
           notNull: false,

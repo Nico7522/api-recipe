@@ -7,7 +7,7 @@ const { registerValidator, loginValidator, changeUserStatusValidator } = require
 const userRoute = require('express').Router()
 
 userRoute.route('/')
-.get(paginationMiddleware(2),userController.GetAll)
+.get(paginationMiddleware(8),userController.GetAll)
 
 userRoute.route('/:id')
 .get(userController.GetById)

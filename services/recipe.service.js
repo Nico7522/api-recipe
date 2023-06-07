@@ -245,11 +245,13 @@ const recipeService = {
   },
   create: async (recipeToCreate) => {
     const transaction = await db.sequelize.transaction();
+    
     let recipe;
-
+    
+    console.log(recipeToCreate);
     try {
       recipe = await db.Recipe.create(recipeToCreate, { transaction });
-
+      
       if (recipeToCreate.ingredients) {
         for (const ingre of recipeToCreate.ingredients) {
           await recipe.addIngredient(ingre.id, {
@@ -273,6 +275,7 @@ const recipeService = {
           { model: User, as: "reactionUser" },
         ],
       });
+      
 
       return recipeCreated ? new RecipeDTO(recipeCreated) : null;
     } catch (error) {

@@ -23,7 +23,7 @@ module.exports = (sequelize) => {
             validate: {
                 notNull: true,
                 notEmpty: true,
-                isIn: [["grammes", "kilogrammes", "tbsp", "tsp", "lb", "oz", "cup"]]
+                isIn: [["grammes", "litres", "kilogrammes", "tbsp", "tsp", "lb", "oz", "cup"]]
 
             }
         }

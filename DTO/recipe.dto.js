@@ -6,8 +6,6 @@ const { CommentDTO } = require("./comment.dto");
 
 class RecipeDTO {
     constructor({id, name, description, image, valid, Ingredients,  reactionUser, Tags, Comments, User, creator, createdAt}) {
-    
-        
         this.id = id,
         this.name = name,
         this.description = description,

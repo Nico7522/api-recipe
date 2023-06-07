@@ -1,7 +1,7 @@
 const yup = require("yup");
 
 const createRecipeValidator = yup.object({
-  name: yup.string().min(1).max(50).required("Required field !"),
+  name: yup.string().min(1).max(100).required("Required field !"),
   description: yup.string().min(1).required("Required field !"),
   ingredients: yup
     .array()

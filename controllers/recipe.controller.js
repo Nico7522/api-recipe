@@ -94,9 +94,10 @@ const recipeController = {
    */
   create: async (req, res) => {
     const data = req.body;
+    
     const newRecipe = await recipeService.create(data);
     res.location("/recipe/" + newRecipe.id);
-    res.status(201).json(new SuccesResponse(newRecipe, 201));
+    res.status(200).json(new SuccesResponse(newRecipe, 200));
   },
 
   /**
