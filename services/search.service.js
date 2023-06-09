@@ -4,7 +4,7 @@ const db = require("../models");
 
 const searchService = {
   getAll: async (tag, recipe, ingredient) => {
-    console.log( "ingre", ingredient);
+    
     
     const tagsCondition = tag
       ? { name: Array.isArray(tag) ? { [Op.in]: tag } : tag }

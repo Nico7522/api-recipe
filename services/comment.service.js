@@ -12,8 +12,10 @@ const commentService = {
     return comments.map((c) => new CommentDTO(c));
   },
 
-  getAllAdmin: async (limit, startIndex) => {
-    
+  getAllAdmin: async (limit, startIndex, isValid) => {
+  
+    let validity = isValid === 'true'? { valid: false } : {};
+   
     // const AllComments = await db.sequelize.query(
     //     `SELECT comment.id as "comment_id", comment.text, comment.valid as "valid", user.id as "user_id", user.name as "user_name", recipe.id as "recipe_id", recipe.name as "recipe_name" FROM comment LEFT JOIN recipe ON comment.RecipeId = recipe.id LEFT JOIN user ON comment.UserId = user.id `,
     //     {
@@ -24,6 +26,7 @@ const commentService = {
     // return AllComments
     const comments = await db.Comment.findAll({
         include: [User, Recipe],
+        where: validity,
         offset: startIndex,
         limit: limit
       });

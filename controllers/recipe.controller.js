@@ -12,9 +12,9 @@ const recipeController = {
    * @param {Response} res
    */
   getAllRecipes: async (req, res) => {
-   
+    const isValid = req.query.valid
     const { page, limit, startIndex, endIndex } = req.pagination
-    const {recipes, count} = await recipeService.getAllRecipes(startIndex, endIndex, limit, page);
+    const {recipes, count} = await recipeService.getAllRecipes(startIndex, endIndex, limit, page, isValid);
     res.status(200).json(new SuccesMultipleResponse(recipes, count));
   },
   /**

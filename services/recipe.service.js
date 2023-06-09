@@ -69,7 +69,9 @@ const recipeService = {
     // });
     // return recipes.map((r) => new RecipeDTO(r));
   },
-  getAllRecipes: async (startIndex, endIndex, limit, page) => {
+  getAllRecipes: async (startIndex, endIndex, limit, page, isValid) => {
+    let validity = isValid === 'true'? { valid: false } : {};
+
     const { rows, count } = await db.Recipe.findAndCountAll({
       include: [
         Ingredient,
@@ -79,7 +81,7 @@ const recipeService = {
         { model: User, as: "reactionUser" },
       ],
       order: [["createdAt", "DESC"]],
-
+      where: validity,
       distinct: true,
       offset: startIndex,
       limit: limit,

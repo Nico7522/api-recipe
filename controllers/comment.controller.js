@@ -21,10 +21,11 @@ const commentController = {
    * @param {Response} res
    */
   getAllAdmin: async (req, res) => {
-
+    const isValid = req.query.valid
+ 
     const { page, limit, startIndex, endIndex } = req.pagination
 
-    const allComments = await commentService.getAllAdmin(limit, startIndex);
+    const allComments = await commentService.getAllAdmin(limit, startIndex, isValid);
     res.status(200).json(allComments);
   },
 
