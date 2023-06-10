@@ -37,7 +37,7 @@ db.Recipe.belongsTo(db.User, {as: "creator" });
 db.User.hasMany(db.Comment)
 db.Comment.belongsTo(db.User)
 
-db.Recipe.hasMany(db.Comment);
-db.Comment.belongsTo(db.Recipe)
+db.Recipe.hasMany(db.Comment, { onDelete: 'CASCADE', onUpdate: 'cascade', hooks: true, foreignKeyConstraint: true});
+db.Comment.belongsTo(db.Recipe, { onDelete: 'CASCADE', onUpdate: 'cascade', hooks: true, foreignKeyConstraint: true})
 
 module.exports = db;

@@ -303,11 +303,14 @@ const recipeService = {
   },
 
   delete: async (id) => {
-    const isDeleted = await db.Recipe.destroy({
-      where: { id },
-    });
 
-    return isDeleted === 1;
+    const isDeleted = await db.Recipe.destroy({
+        where: { id },
+        
+        
+      });
+      
+      return isDeleted === 1;
   },
 
   react: async (recipeId, userId, reactionToCreate) => {
