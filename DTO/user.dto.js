@@ -1,4 +1,3 @@
-const { RecipeDTO } = require("./recipe.dto");
 
 class UserDTO {
     constructor({id, name, surname, birthdate, email, avatar, status, Recipes, createdAt }){

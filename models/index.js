@@ -10,12 +10,12 @@ const db = {};
 db.sequelize = dataBase
 
 db.Recipe = require('./recipe.model')(dataBase);
+db.Comment = require('./comment.model')(dataBase);
 db.Ingredient = require('./ingredient.model')(dataBase);
 db.Tag = require('./tag.model')(dataBase);
 db.User = require('./user.model')(dataBase);
 db.MM_Recipe_Ingredient = require('./MM_recipe_ingredient.model')(dataBase);
 db.MM_User_React_Recipe = require('./MM_user_react_recipe.model')(dataBase);
-db.Comment = require('./comment.model')(dataBase);
 
 // Liaison entre les recipes et les ingredients
 db.Recipe.belongsToMany(db.Ingredient, {through: db.MM_Recipe_Ingredient})
@@ -37,7 +37,7 @@ db.Recipe.belongsTo(db.User, {as: "creator" });
 db.User.hasMany(db.Comment)
 db.Comment.belongsTo(db.User)
 
-db.Recipe.hasMany(db.Comment, { onDelete: 'CASCADE', hooks: true});
-db.Comment.belongsTo(db.Recipe, { onDelete: 'CASCADE', hooks: true})
+db.Recipe.hasMany(db.Comment);
+db.Comment.belongsTo(db.Recipe)
 
 module.exports = db;

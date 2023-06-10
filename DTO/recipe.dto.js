@@ -5,7 +5,7 @@ const { IngredientRecipeDTO } = require("./ingredient.dto");
 const { CommentDTO } = require("./comment.dto");
 
 class RecipeDTO {
-    constructor({id, name, description, image, valid, Ingredients,  reactionUser, Tags, Comments, User, creator, createdAt}) {
+    constructor({id, name, description, image, valid, Ingredients,  reactionUser, Tags, Comments , creator, createdAt}) {
         this.id = id,
         this.name = name,
         this.description = description,
@@ -23,7 +23,7 @@ class RecipeDTO {
 }
 
 class RecipeRawDTO {
-    constructor({id, name, description, image, valid, Ingredients, Users, Tags, Comments, UserId, User, createdAt}) {
+    constructor({id, name, description, image, valid, Ingredients, Users, Tags, Comments, User, createdAt}) {
     
         this.id = id,
         this.name = name,

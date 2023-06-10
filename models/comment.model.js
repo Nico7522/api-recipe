@@ -1,5 +1,5 @@
 const { Sequelize, ModelStatic, DataTypes } = require('sequelize');
-const { Recipe } = require('.');
+
 
 /**
  * @param { Sequelize } sequelize
@@ -35,15 +35,7 @@ module.exports = (sequelize) => {
                 notEmpty: true
             }
         },
-        RecipeId: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            references: {
-                model: 'Recipe',
-                key: 'id'
-              },
-              onDelete: 'CASCADE'
-          },
+
     },
     {
         tableName: "Comment"
