@@ -66,15 +66,15 @@ module.exports = (sequelize) => {
     {
       tableName: "Recipe",
       paranoid: false,
-      hooks: {
-        afterDestroy: function (instance, options) {
-          const Comment = db.Comment;
-          console.log(Comment);
-          Comment.destroy({
-            where: {RecipeId: instance.id}
-          })
-        }
-      }
+      // hooks: {
+      //   afterDestroy: function (instance, options) {
+      //     const Comment = db.Comment;
+      //     console.log(Comment);
+      //     Comment.destroy({
+      //       where: {RecipeId: instance.id}
+      //     })
+      //   }
+      // }
       
       
     },

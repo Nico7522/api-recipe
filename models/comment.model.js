@@ -40,15 +40,15 @@ module.exports = (sequelize) => {
           notEmpty: true,
         },
       },
-      RecipeId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        onDelete: "CASCADE",
-        references: {
-          model: "Recipes",
-          key: "id",
-        },
-      },
+      // RecipeId: {
+      //   type: DataTypes.INTEGER,
+      //   allowNull: false,
+      //   onDelete: "CASCADE",
+      //   references: {
+      //     model: "Recipes",
+      //     key: "id",
+      //   },
+      // },
     },
     {
       tableName: "Comment",

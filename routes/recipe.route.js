@@ -10,6 +10,7 @@ const bodyValidator = require("../middlewares/validator");
 const {createRecipeValidator, updateRecipeCoverValidator} = require("../validators/recipe.validator");
 
 const multer = require('multer');
+const authToken = require("../middlewares/token.middleware");
 const storage = require('../utils/multer')('recipe');
 const upload = multer({storage})
 
@@ -18,7 +19,7 @@ const upload = multer({storage})
 recipeRoute
   .route("/")
   .get(paginationMiddleware(3), recipeController.getAllPaginated)
-  .post(bodyValidator(createRecipeValidator) ,recipeController.create);
+  .post(authToken(["Admin", "Certified user", "User"]) ,bodyValidator(createRecipeValidator) ,recipeController.create);
   recipeRoute
     .route("/:id/updateimage")
     .patch(bodyValidator(updateRecipeCoverValidator) ,upload.single("image"), recipeController.updateImage);

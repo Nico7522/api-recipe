@@ -304,11 +304,7 @@ const recipeService = {
 
   delete: async (id) => {
 
-    const isDeleted = await db.Recipe.destroy({
-        where: { id },
-        
-        
-      });
+    const isDeleted = await db.Recipe.destroy({  cascade: true, force: true, where: { id }});
       
       return isDeleted === 1;
   },

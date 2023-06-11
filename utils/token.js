@@ -30,7 +30,7 @@ const tokenUtils = {
         audience: JWT_AUDIENCE,
         issuer: JWT_ISSUER,
       };
-      jsonwebtoken.decode(token, JWT_SECRET, options, (error, payload) => {
+      jsonwebtoken.verify(token, JWT_SECRET, options, (error, payload) => {
         error ? reject(error) : resolve(payload);
       });
     });

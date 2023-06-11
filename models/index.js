@@ -3,7 +3,8 @@ const { DB_SERVEUR, DB_DATABASE, DB_USERNAME, DB_PASSWORD } = process.env;
 
 const dataBase = new Sequelize(DB_DATABASE, DB_USERNAME, DB_PASSWORD, {
     host: DB_SERVEUR,
-    dialect: 'mysql'
+    dialect: 'mysql',
+    
 })
 
 const db = {};
@@ -37,7 +38,7 @@ db.Recipe.belongsTo(db.User, {as: "creator" });
 db.User.hasMany(db.Comment)
 db.Comment.belongsTo(db.User)
 
-db.Recipe.hasMany(db.Comment, { onDelete: 'CASCADE', onUpdate: 'cascade', hooks: true, foreignKeyConstraint: true});
-db.Comment.belongsTo(db.Recipe, { onDelete: 'CASCADE', onUpdate: 'cascade', hooks: true, foreignKeyConstraint: true})
+db.Recipe.hasMany(db.Comment, { onDelete: 'CASCADE', onUpdate: 'cascade', hooks: true});
+db.Comment.belongsTo(db.Recipe, { onDelete: 'CASCADE', onUpdate: 'cascade', hooks: true})
 
 module.exports = db;
