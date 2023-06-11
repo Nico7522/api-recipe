@@ -21,17 +21,21 @@ const tokenUtils = {
   },
 
   decode: (token) => {
-    if (!token || token === "") {
+    if (!token || token === "" || token === null || token === undefined) {
       return Promise.reject("Token not found");
     }
 
     return new Promise((resolve, reject) => {
       const options = {
-        audience: JWT_AUDIENCE,
         issuer: JWT_ISSUER,
+        audience: JWT_AUDIENCE,
       };
       jsonwebtoken.verify(token, JWT_SECRET, options, (error, payload) => {
-        error ? reject(error) : resolve(payload);
+        if (error) {
+          console.log('eeee', error);
+          reject(error);
+        }
+        resolve(payload);
       });
     });
   },
