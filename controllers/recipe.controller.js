@@ -110,18 +110,19 @@ const recipeController = {
     const recipeUpdated = await recipeService.update(id, data);
     return res.status(201).json(recipeUpdated);
   },
-
+  
   /**
    * @param {Request} req
    * @param {Response} res
-   */
-  delete: async (req, res) => {
-    const { id } = req.params;
+  */
+ delete: async (req, res) => {
+   const { id } = req.params;
+   console.log(id);
     const isDeleted = await recipeService.delete(id);
     if (!isDeleted) {
-      res.sendStatus(404);
+      return res.sendStatus(404);
     }
-    res.sendStatus(204);
+   return res.sendStatus(204);
   },
   /**
    * @param {Request} req

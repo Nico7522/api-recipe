@@ -1,6 +1,7 @@
 const ConnexionController = require('../controllers/connection.controller');
 const userController = require('../controllers/user.controller');
 const paginationMiddleware = require('../middlewares/pagination.middleware');
+const authToken = require('../middlewares/token.middleware');
 const bodyValidator = require('../middlewares/validator');
 const { registerValidator, loginValidator, changeUserStatusValidator } = require('../validators/user.validator');
 
@@ -16,7 +17,7 @@ userRoute.route('/:id')
 .delete(userController.delete)
 
 userRoute.route('/:id/resetpassword')
-.patch(userController.updatePassword)
+.patch(authToken(['Admin', 'User', 'Certified User']), userController.updatePassword)
 userRoute.route('/signup')
 .post( bodyValidator(registerValidator) ,ConnexionController.signup)
 

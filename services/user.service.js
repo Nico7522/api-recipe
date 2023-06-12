@@ -20,7 +20,6 @@ const userService = {
   getById: async (id) => {
     const user = await db.User.findByPk(id, {
       include: [Recipe],
-
     });
     return user ? new UserDTO(user) : null;
   },
@@ -42,31 +41,38 @@ const userService = {
   },
 
   updateStatus: async (id, status) => {
-    const user = await db.User.update({status: status},{
-      where: {id: id}
-    });
+    const user = await db.User.update(
+      { status: status },
+      {
+        where: { id: id },
+      }
+    );
     if (user) {
       const newUpdate = await db.User.findByPk(id);
-      return new UserDTO(newUpdate)
+      return new UserDTO(newUpdate);
     }
-    return user
-   
+    return user;
   },
 
   updatePassword: async (id, newPassword) => {
     const user = await db.User.findByPk(id);
+    console.log("user", newPassword);
+
     const isPasswordChanged = await argon2.verify(user.password, newPassword);
-    const isPasswordOk = newPassword.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/);
+
+    const isPasswordOk = newPassword.match(
+      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/
+    );
     if (!isPasswordOk) {
-        return 0;
+      return 0; // Mot de passe ne march pas avec la regex
     }
     if (isPasswordChanged) {
-        return -1
+      return -1; // Mot de passe identique
     }
     const hashedPassword = await argon2.hash(newPassword);
     const passwordToChange = await db.User.update(
       { password: hashedPassword },
-      { where: { id: 1 } }
+      { where: { id } }
     );
     return passwordToChange;
   },

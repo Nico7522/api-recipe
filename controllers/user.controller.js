@@ -81,19 +81,19 @@ const userController = {
   updatePassword: async(req, res) => {
     const { id } = req.params;
     const newPassword = req.body.password;
-    console.log(newPassword);
+   
     const passwordToUpdate = await userService.updatePassword(id, newPassword);
-    console.log(passwordToUpdate);
-    // if (passwordToUpdate === 0) {
-    //   res.status(304).json(new errorResponse('Password doesn\'t not match the requirements !', 304))
-    //   return;
-    // };
-    // if (passwordToUpdate === -1) {
-    //   res.status(304).json(new errorResponse('Password must be different !', 304));
-    //   return;
+    console.log('controller', passwordToUpdate);
+    if (passwordToUpdate === 0) {
+      res.status(404).json(new errorResponse('Password doesn\'t not match the requirements !', 304))
+      return;
+    };
+    if (passwordToUpdate === -1) {
+      res.status(404).json(new errorResponse('Password must be different !', 304));
+      return;
      
 
-    // }
+    }
     res.status(201).json(passwordToUpdate)
   }
 };

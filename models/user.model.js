@@ -59,7 +59,7 @@ module.exports = (sequelize) => {
                 is: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/,
                 notNull: true,
                 notEmpty: true,
-                len: [8,100]
+                
             }
         },
         avatar: {
