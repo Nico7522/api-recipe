@@ -9,6 +9,8 @@ const userRoute = require('express').Router()
 
 userRoute.route('/')
 .get(paginationMiddleware(8),userController.GetAll)
+userRoute.route('/resetpassword')
+.patch(userController.updatePassword)
 
 userRoute.route('/:id')
 .get(userController.GetById)
@@ -16,8 +18,6 @@ userRoute.route('/:id')
 .patch(bodyValidator(changeUserStatusValidator),userController.updateStatus)
 .delete(userController.delete)
 
-userRoute.route('/:id/resetpassword')
-.patch(authToken(['Admin', 'User', 'Certified User']), userController.updatePassword)
 userRoute.route('/signup')
 .post( bodyValidator(registerValidator) ,ConnexionController.signup)
 

@@ -54,9 +54,12 @@ const userService = {
     return user;
   },
 
-  updatePassword: async (id, newPassword) => {
-    const user = await db.User.findByPk(id);
-    console.log("user", newPassword);
+  updatePassword: async (mail, newPassword) => {
+   
+    const user = await db.User.findOne({
+      where: { email: mail }
+    });
+    
 
     const isPasswordChanged = await argon2.verify(user.password, newPassword);
 
@@ -72,7 +75,7 @@ const userService = {
     const hashedPassword = await argon2.hash(newPassword);
     const passwordToChange = await db.User.update(
       { password: hashedPassword },
-      { where: { id } }
+      { where: { email: mail } }
     );
     return passwordToChange;
   },

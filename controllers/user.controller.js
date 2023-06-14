@@ -79,11 +79,12 @@ const userController = {
   },
 
   updatePassword: async(req, res) => {
-    const { id } = req.params;
+    // const { id } = req.params;
     const newPassword = req.body.password;
+    const mail = req.body.mail;
    
-    const passwordToUpdate = await userService.updatePassword(id, newPassword);
-    console.log('controller', passwordToUpdate);
+    const passwordToUpdate = await userService.updatePassword(mail, newPassword);
+
     if (passwordToUpdate === 0) {
       res.status(404).json(new errorResponse('Password doesn\'t not match the requirements !', 304))
       return;
