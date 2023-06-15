@@ -3,6 +3,7 @@ const db = require("../models");
 const argon2 = require("argon2");
 const { Recipe } = require("../models");
 const { where } = require("sequelize");
+const { main } = require("../mail/main");
 
 const userService = {
   getAll: async (startIndex, endIndex, limit, page) => {
@@ -54,6 +55,18 @@ const userService = {
     return user;
   },
 
+  forgotPassword: async(mail) => {
+    const user = await db.User.findOne({
+      where: { email: mail }
+    })
+    if (!user) {
+      return null
+    }
+    const name = user.name
+    const mailConfirm = await main.sendMail(mail, name);
+    return 1
+  },
+
   updatePassword: async (mail, newPassword) => {
    
     const user = await db.User.findOne({
@@ -77,6 +90,7 @@ const userService = {
       { password: hashedPassword },
       { where: { email: mail } }
     );
+    const mailConfirm = await main.sendMail(mail)
     return passwordToChange;
   },
 };

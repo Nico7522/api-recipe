@@ -78,6 +78,25 @@ const userController = {
     res.status(201).json(new SuccesResponse(userToUpdate, 200))
   },
 
+ /**
+   * @param {Request} req
+   * @param {Response} res
+   */
+  forgotPassword: async (req,res) => {
+    const mail = req.body.mail
+    const mailConfirm = await userService.forgotPassword(mail);
+    console.log(mailConfirm);
+    if (!mailConfirm) {
+      res.status(404).json(new errorResponse("Error", 404));
+      return
+    }
+    res.sendStatus(200)
+  },
+
+ /**
+   * @param {Request} req
+   * @param {Response} res
+   */
   updatePassword: async(req, res) => {
     // const { id } = req.params;
     const newPassword = req.body.password;

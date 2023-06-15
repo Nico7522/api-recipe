@@ -9,6 +9,8 @@ const userRoute = require('express').Router()
 
 userRoute.route('/')
 .get(paginationMiddleware(8),userController.GetAll)
+
+userRoute.route('/forgotpassword').post(userController.forgotPassword)
 userRoute.route('/resetpassword')
 .patch(userController.updatePassword)
 

@@ -1,12 +1,12 @@
 const nodemailer = require("nodemailer");
 const main =  {
-    sendMail: async() => {
+    sendMail: async(mail, name) => {
         let mailOptions = {
           from: '"Recipe food Team" <nico.daddabbo7100@gmail.com>',
-          to: "nico.daddabbo7100@gmail.com",
-          subject: "Confirm your account",
-          text: "Hey there, please confirm your account to continue",
-          html: `<b>Hey there! </b><br>Confirm account here http://127.0.0.1:5173/user/profil/48`,
+          to: `${mail}`,
+          subject: "Password reset",
+          text: "Hey there, your password has been reset",
+          html: `<b> hey ${name}</b><br>You can reset your password here http://127.0.0.1:5173/user/resetpassword`,
         };
       
         let transporter = nodemailer.createTransport({
@@ -26,11 +26,11 @@ const main =  {
         let info = await transporter.sendMail(mailOptions);
       
         console.log("Message sent: %s", info.messageId);
-        // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+       
       
-        // Preview only available when sending through an Ethereal account
+      
         console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-        // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+       
 
     }
 }
