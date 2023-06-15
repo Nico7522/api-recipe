@@ -1,10 +1,11 @@
 const ingredientController = require('../controllers/ingredient.controller');
+const paginationMiddleware = require('../middlewares/pagination.middleware');
 
 const ingredientRoute = require('express').Router();
 
 
 ingredientRoute.route('/')
-    .get(ingredientController.getAll)
+    .get(paginationMiddleware(20) ,ingredientController.getAll)
     .post(ingredientController.create)
 
 ingredientRoute.route('/:id')

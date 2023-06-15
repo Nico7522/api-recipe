@@ -3,7 +3,7 @@ const { IngredientDTO } = require('../DTO/ingredient.dto');
 const db = require('../models');
 
 const ingredientService = {
-    getAll: async (ingredient) => {
+    getAll: async (ingredient, page, limit, startIndex, endIndex) => {
         let whereConditionIngredient = {};
         if (ingredient) {
             whereConditionIngredient = { name: { [Op.startsWith]: ingredient }}
@@ -11,7 +11,9 @@ const ingredientService = {
         }
         const {rows, count } = await db.Ingredient.findAndCountAll({
             where: {...whereConditionIngredient},
-            distinct: true
+            distinct: true,
+            offset: startIndex,
+            limit: limit
         });
         return {
             ingredients: rows.map(i => new IngredientDTO(i)),
