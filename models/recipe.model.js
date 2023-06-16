@@ -1,4 +1,5 @@
 const { Sequelize, ModelStatic, DataTypes } = require("sequelize");
+const db = require(".");
 
 /**
  * @param { Sequelize } sequelize
@@ -9,17 +10,17 @@ module.exports = (sequelize) => {
     "Recipe",
     {
       name: {
-        type: DataTypes.STRING(50),
+        type: DataTypes.STRING(100),
         allowNull: false,
         unique: "UK_recipe_name",
         validate: {
           notNull: true,
           notEmpty: true,
-          len: [1, 50],
+          len: [1, 100],
         },
       },
       description: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT('long'),
         allowNull: false,
         validate: {
           notNull: false,
@@ -27,13 +28,13 @@ module.exports = (sequelize) => {
         },
       },
       image: {
-        type: DataTypes.STRING(50),
+        type: DataTypes.STRING,
         allowNull: false,
         defaultValue: "/images/recipe/recipedefault.jpg",
         validate: {
             notNull: true,
             notEmpty: true,
-            len: [1, 50]
+           
         },
       },
       valid: {
@@ -44,14 +45,40 @@ module.exports = (sequelize) => {
           notNull: true,
           notEmpty: true,
           isIn: [[true, false]],
+          
         },
+        
       },
+      // comments: {
+      //   type: DataTypes.INTEGER,
+      //   references: {
+      //       model: 'Comments',
+      //       key: 'id'
+      //     },
+      //     onDelete: 'CASCADE'
+      // },
+  
+     
+     
       // ingredients[]
       // comments[]
     },
     {
       tableName: "Recipe",
-    }
+      paranoid: false,
+      // hooks: {
+      //   afterDestroy: function (instance, options) {
+      //     const Comment = db.Comment;
+      //     console.log(Comment);
+      //     Comment.destroy({
+      //       where: {RecipeId: instance.id}
+      //     })
+      //   }
+      // }
+      
+      
+    },
+   
   );
   return Recipe;
 };

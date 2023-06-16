@@ -14,61 +14,57 @@ module.exports = (sequelize) => {
         allowNull: false,
         unique: "UK_ingredient_name",
         validate: {
-            notNull: true,
-            notEmpty: true,
-            len: [1, 50],
-        }
-
+          notNull: true,
+          notEmpty: true,
+          len: [1, 50],
+        },
       },
       calories: {
         type: DataTypes.FLOAT(7),
         allowNull: false,
         validate: {
-            max: 10000,
-            notNull: true,
-            notEmpty: true,
-            isInt: true,
-            len: [1, 5]
-        }
+          max: 10000,
+          notNull: true,
+          notEmpty: true,
+          len: [1, 7],
+        },
       },
       carbohydrates: {
         type: DataTypes.FLOAT(6),
         allowNull: true,
         validate: {
-            max: 1000,
-            notNull: false,
-            notEmpty: false,
-            isInt: true
-        }
+          max: 1000,
+          notNull: false,
+          notEmpty: false,
+        },
       },
       fats: {
         type: DataTypes.FLOAT(6),
         allowNull: true,
         validate: {
-            max: 1000,
-            notNull: false,
-            notEmpty: false,
-            isInt: true
-        }
+          max: 1000,
+          notNull: false,
+          notEmpty: false,
+        },
       },
       proteins: {
         type: DataTypes.FLOAT(6),
         allowNull: true,
         validate: {
-            max: 1000,
-            notNull: false,
-            notEmpty: false
-        }
+          max: 1000,
+          notNull: false,
+          notEmpty: false,
+        },
       },
       valid: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false,
         validate: {
-            notNull: true,
-            notEmpty: true,
-            isIn: [[true, false]]
-        }
+          notNull: true,
+          notEmpty: true,
+          isIn: [[true, false]],
+        },
       },
     },
     {
