@@ -1,14 +1,62 @@
-const recipeController = require('../controllers/recipe.controller');
+const commentController = require("../controllers/comment.controller");
+const recipeController = require("../controllers/recipe.controller");
+const recipeService = require("../services/recipe.service");
+const recipeRoute = require("express").Router();
 
-const recipeRoute = require('express').Router()
 
-recipeRoute.route('/')
-.get()
-.post()
+const uuid = require("uuid");
+const paginationMiddleware = require("../middlewares/pagination.middleware");
+const bodyValidator = require("../middlewares/validator");
+const {createRecipeValidator, updateRecipeCoverValidator} = require("../validators/recipe.validator");
 
-recipeRoute.route('/:id')
-.get(recipeController.getAll)
-.put()
-.delete()
+const multer = require('multer');
+const authToken = require("../middlewares/token.middleware");
+const storage = require('../utils/multer')('recipe');
+const upload = multer({storage})
+
+
+
+recipeRoute
+  .route("/")
+  .get(paginationMiddleware(3), recipeController.getAllPaginated)
+  .post(authToken(["Admin", "Certified user", "User"]) ,bodyValidator(createRecipeValidator) ,recipeController.create);
+  recipeRoute
+    .route("/:id/updateimage")
+    .patch(bodyValidator(updateRecipeCoverValidator) ,upload.single("image"), recipeController.updateImage);
+  
+  recipeRoute.route("/top")
+  .get(recipeController.getTopRecipe);
+  
+recipeRoute.route("/react").post(recipeController.react);
+recipeRoute.route("/admin")
+  .get(paginationMiddleware(12) ,recipeController.getAllRecipes);
+  
+recipeRoute.route("/admin/:id")
+    .patch(recipeController.updateValidity);
+
+recipeRoute.route("/react/:id").get(recipeController.getByReact);
+
+recipeRoute
+  .route("/comment")
+  .get(commentController.getAll)
+  .post(commentController.post)
+  .delete(recipeController.deleteComment);
+
+
+
+  
+recipeRoute
+  .route("/:id")
+  .get(recipeController.getById)
+  .put(recipeController.update)
+  .delete(recipeController.delete);
+
+recipeRoute
+  .route("/comment/:id")
+  .get(commentController.getById)
+  .put(commentController.edit)
+  .delete(commentController.delete);
+
+
 
 module.exports = recipeRoute;
