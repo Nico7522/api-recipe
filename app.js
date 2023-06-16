@@ -23,4 +23,4 @@ appRecipe.use(express.json())
 appRecipe.use('/api', route);
 // main.sendMail().catch(console.error)
 
-appRecipe.listen(process.env.PORT, () => { console.log(`PORT : ${process.env.PORT}`);})
+appRecipe.listen(3000, () => { console.log(`PORT : ${process.env.PORT}`);})
