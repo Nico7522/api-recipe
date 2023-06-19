@@ -7,21 +7,24 @@ const appRecipe = express();
 const dataBase = require('./models');
 const route = require('./routes');
 const { main } = require('./mail/main');
-const AccessControl = require('express-ip-access-control');
+// const AccessControl = require('express-ip-access-control');
 const { AUTHORIZED_IP } = process.env
-const options = {
-	mode: 'allow',
-	denys: [],
-	allows: ['::ffff:127.0.0.1' , '91.181.151.52'],
-	forceConnectionAddress: false,
-	log: function(clientIp, access) {
-		console.log(clientIp + (access ? ' accessed.' : ' denied.'));
-	},
+// const options = {
+// 	mode: 'allow',
+// 	denys: [],
+// 	allows: ['::ffff:127.0.0.1' , '91.181.151.52'],
+// 	forceConnectionAddress: false,
+// 	log: function(clientIp, access) {
+// 		console.log(clientIp + (access ? ' accessed.' : ' denied.'));
+// 	},
 
-	statusCode: 401,
-	redirectTo: '',
-	message: 'Unauthorized'
-};
+// 	statusCode: 401,
+// 	redirectTo: '',
+// 	message: 'Unauthorized'
+// };
+
+
+
 
 appRecipe.use(cors())
 dataBase.sequelize.authenticate()
@@ -34,10 +37,16 @@ if (process.env.NODE_ENV === "development") {
     // dataBase.sequelize.sync({alter : { drop: false}});
 }
 appRecipe.use(express.static('public'));
-appRecipe.use(AccessControl(options));
-
+// appRecipe.use(AccessControl(options));
 appRecipe.use(express.json())
-appRecipe.use('/api', route);
+appRecipe.use('/api', (req, res, next) => {
+	const pass = process.env.AUTHORIZED_IP;
+	if (pass !== AUTHORIZED_IP) {
+	  return res.status(401).json({ error: 'Unauthorized' });
+	}
+	next();
+  }, route);
+// appRecipe.use('/api', route);
 // main.sendMail().catch(console.error)
 
 appRecipe.listen(process.env.PORT, () => { console.log(`PORT : ${process.env.PORT}`);})
