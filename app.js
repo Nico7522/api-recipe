@@ -9,9 +9,9 @@ const route = require('./routes');
 const { main } = require('./mail/main');
 const AccessControl = require('express-ip-access-control');
 const options = {
-	mode: 'deny',
+	mode: 'allow',
 	denys: [],
-	allows: [],
+	allows: ['91.181.151.52'],
 	forceConnectionAddress: false,
 	log: function(clientIp, access) {
 		console.log(clientIp + (access ? ' accessed.' : ' denied.'));
