@@ -23,9 +23,8 @@ const ip = require('ip')
 // 	redirectTo: '',
 // 	message: 'Unauthorized'
 // };
-const myip = ip.address()
-console.log(myip === AUTHORIZED_IP);
-
+const myip= ip.address('public', 'ipv4')
+console.log(myip);
 
 
 appRecipe.use(cors())
