@@ -11,7 +11,7 @@ const AccessControl = require('express-ip-access-control');
 const options = {
 	mode: 'allow',
 	denys: [],
-	allows: ['::1'],
+	allows: ['::1', "91.181.151.52"],
 	forceConnectionAddress: false,
 	log: function(clientIp, access) {
 		console.log(clientIp + (access ? ' accessed.' : ' denied.'));
