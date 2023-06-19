@@ -24,6 +24,8 @@ const ip = require('ip')
 // 	message: 'Unauthorized'
 // };
 
+const myip = ip.address();
+console.log(myip);
 appRecipe.use(cors())
 dataBase.sequelize.authenticate()
 .then(() => console.log('ok'))
@@ -37,8 +39,6 @@ if (process.env.NODE_ENV === "development") {
 appRecipe.use(express.static('public'));
 // appRecipe.use(AccessControl(options));
 appRecipe.use(express.json())
-const myip = ip.address();
-console.log(myip);
 appRecipe.use('/api', route);
 // main.sendMail().catch(console.error)
 
