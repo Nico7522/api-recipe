@@ -8,10 +8,11 @@ const dataBase = require('./models');
 const route = require('./routes');
 const { main } = require('./mail/main');
 const AccessControl = require('express-ip-access-control');
+const { AUTHORIZED_IP } = process.env
 const options = {
 	mode: 'allow',
 	denys: [],
-	allows: ['91.181.151.53fdfd'],
+	allows: ['::ffff:127.0.0.1' , '91.181.151.52'],
 	forceConnectionAddress: false,
 	log: function(clientIp, access) {
 		console.log(clientIp + (access ? ' accessed.' : ' denied.'));
