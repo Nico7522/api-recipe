@@ -9,7 +9,7 @@ const route = require('./routes');
 const { main } = require('./mail/main');
 const AccessControl = require('express-ip-access-control');
 const options = {
-	mode: 'allow',
+	mode: 'deny',
 	denys: [],
 	allows: [],
 	forceConnectionAddress: false,
