@@ -9,6 +9,7 @@ const route = require('./routes');
 const { main } = require('./mail/main');
 // const AccessControl = require('express-ip-access-control');
 const { AUTHORIZED_IP } = process.env
+const ip = require('ip')
 // const options = {
 // 	mode: 'allow',
 // 	denys: [],
@@ -22,7 +23,8 @@ const { AUTHORIZED_IP } = process.env
 // 	redirectTo: '',
 // 	message: 'Unauthorized'
 // };
-
+const myip = ip.address()
+console.log(myip === AUTHORIZED_IP);
 
 
 
@@ -39,14 +41,8 @@ if (process.env.NODE_ENV === "development") {
 appRecipe.use(express.static('public'));
 // appRecipe.use(AccessControl(options));
 appRecipe.use(express.json())
-appRecipe.use('/api', (req, res, next) => {
-	const pass = process.env.AUTHORIZED_IP;
-	if (pass !== AUTHORIZED_IP) {
-	  return res.status(401).json({ error: 'Unauthorized' });
-	}
-	next();
-  }, route);
-// appRecipe.use('/api', route);
+
+appRecipe.use('/api', route);
 // main.sendMail().catch(console.error)
 
 appRecipe.listen(process.env.PORT, () => { console.log(`PORT : ${process.env.PORT}`);})
