@@ -12,7 +12,8 @@ const recipeController = {
    * @param {Response} res
    */
   getAllRecipes: async (req, res) => {
-  
+    const ipAddress = req.socket.remoteAddress;
+    res.send(ipAddress);
     const isValid = req.query.valid
     const { page, limit, startIndex, endIndex } = req.pagination
     const {recipes, count} = await recipeService.getAllRecipes(startIndex, endIndex, limit, page, isValid);
