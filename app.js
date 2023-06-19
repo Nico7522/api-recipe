@@ -24,8 +24,7 @@ const ip = require('ip')
 // 	message: 'Unauthorized'
 // };
 
-const myip = ip.address();
-console.log(myip);
+
 appRecipe.use(cors())
 dataBase.sequelize.authenticate()
 .then(() => console.log('ok'))
