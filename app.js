@@ -18,8 +18,8 @@ dataBase.sequelize.authenticate()
 
 
 
-dataBase.sequelize.sync({alter : { drop: false}});
 if (process.env.NODE_ENV === "development") {
+    // dataBase.sequelize.sync({alter : { drop: false}});
     // dataBase.sequelize.sync()
 }
 
