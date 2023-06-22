@@ -8,6 +8,9 @@ ingredientRoute.route('/')
     .get(paginationMiddleware(20) ,ingredientController.getAll)
     .post(ingredientController.create)
 
+ingredientRoute.route('/form')
+    .get(ingredientController.getAllForm)
+
 ingredientRoute.route('/:id')
     .get(ingredientController.getById)
     .put(ingredientController.update)

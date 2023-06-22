@@ -16,6 +16,16 @@ const ingredientController = {
     res.status(200).json(new SuccesMultipleResponse(ingredients, count))
   },
 
+   /**
+   * @param {Request} req
+   * @param {Response} res
+   */
+
+   getAllForm: async (req, res) => {
+    const { ingredients, count } = await ingredientService.getAllForm();
+    res.status(200).json(new SuccesMultipleResponse(ingredients, count))
+   },
+
   /**
    * @param {Request} req
    * @param {Response} res

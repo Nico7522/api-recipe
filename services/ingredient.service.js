@@ -20,6 +20,15 @@ const ingredientService = {
             count,
         }
     },
+    getAllForm: async () => {
+      const { rows, count } = await db.Ingredient.findAndCountAll({
+        distinct: true
+      })  
+      return { 
+        ingredients: rows.map(i => new IngredientDTO(i)),
+        count,
+      }
+    },
     getById: async (id) => {
         const ingredient = db.Ingredient.findByPk(id);
         return ingredient ? new IngredientDTO(ingredient) : null;
