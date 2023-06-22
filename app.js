@@ -16,12 +16,7 @@ dataBase.sequelize.authenticate()
 .then(() => console.log('ok'))
 .catch((err) => console.log(err))
 
-appRecipe.use(
-    // not loading the noSniff() middleware
-    helmet({
-      noSniff: false,
-    })
-  )
+
 
 if (process.env.NODE_ENV === "development") {
     // dataBase.sequelize.sync({alter : { drop: false}});
