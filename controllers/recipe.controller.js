@@ -177,6 +177,7 @@ const recipeController = {
    * @param {Response} res
    */
   updateImage: async (req, res) => {
+    console.log(req.file.filename);
     const { id } = req.params;
     const img = req.file.filename;
     const imageUpdated = await recipeService.updateImage(id, img);

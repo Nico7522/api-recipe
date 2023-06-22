@@ -8,8 +8,8 @@ const config = (folder) => {
             callback(null, `public/images/${folder}`)
         },
         filename: (req, file, callback) => {
-            const name = uuid.v4();
-            const ext = file.originalname.split('.').at(-1);
+            const name = uuid.v4()
+            const ext = file.originalname.split('.').at(-1)
             callback(null, name + '.' + ext);
         }
     })
