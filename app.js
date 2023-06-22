@@ -7,9 +7,9 @@ const appRecipe = express();
 const dataBase = require('./models');
 const route = require('./routes');
 const { main } = require('./mail/main');
+const helmet = require('helmet')
 
-
-
+appRecipe.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 
 appRecipe.use(cors())
 dataBase.sequelize.authenticate()
@@ -22,6 +22,7 @@ if (process.env.NODE_ENV === "development") {
     // dataBase.sequelize.sync({alter : { drop: false}});
     // dataBase.sequelize.sync()
 }
+
 
 appRecipe.use(express.json())
 appRecipe.use(express.static('public'));
