@@ -5,7 +5,7 @@ const ingredientRoute = require('express').Router();
 
 
 ingredientRoute.route('/')
-    .get(paginationMiddleware(20) ,ingredientController.getAll)
+    .get(paginationMiddleware(15) ,ingredientController.getAll)
     .post(ingredientController.create)
 
 ingredientRoute.route('/form')
