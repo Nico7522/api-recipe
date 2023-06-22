@@ -8,7 +8,7 @@ const tokenUtils = {
       const secret = JWT_SECRET;
       const options = {
         algorithm: "HS512",
-        expiresIn: "1d",
+        expiresIn: "10d",
         issuer: JWT_ISSUER,
         audience: JWT_AUDIENCE,
       };
