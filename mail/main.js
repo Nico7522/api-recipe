@@ -32,7 +32,7 @@ const main = {
     console.log(subject, body, mail);
 
     let mailOptions = {
-      from: "Recipe food team contact page",
+      from: `"Contact page" <${mail}>`,
       to: "nico.daddabbo7100@gmail.com",
       subject: `${subject}`,
       text: `${body}`,
@@ -40,7 +40,9 @@ const main = {
     }
 
     let transporter = nodemailer.createTransport({
-      service: "gmail",
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
       auth: {
         user: "nico.daddabbo7100@gmail.com",
         pass: "miuckyponpruumqn",
