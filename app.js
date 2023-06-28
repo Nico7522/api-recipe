@@ -5,17 +5,14 @@ require('express-async-errors');
 const appRecipe = express();
 const dataBase = require('./models');
 const route = require('./routes');
-const helmet = require('helmet')
+const { AUTHORIZED_ORIGIN } = process.env
+
+appRecipe.use(cors({
+    origin: AUTHORIZED_ORIGIN
+}));
 
 
-  appRecipe.use(
-    helmet({
-      crossOriginResourcePolicy: false,
-    })
-  );
 
-
-appRecipe.use(cors())
 dataBase.sequelize.authenticate()
 .then(() => console.log('ok'))
 .catch((err) => console.log(err))
@@ -28,9 +25,9 @@ if (process.env.NODE_ENV === "development") {
 }
 
 
-appRecipe.use(express.json())
 appRecipe.use(express.static('public'));
+appRecipe.use(express.json())
 appRecipe.use('/api', route);
-// main.sendMail().catch(console.error)
+
 
 appRecipe.listen(process.env.PORT, () => { console.log(`PORT : ${process.env.PORT}`);})
