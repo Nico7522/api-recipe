@@ -9,6 +9,11 @@ const route = require('./routes');
 const { main } = require('./mail/main');
 const helmet = require('helmet')
 
+appRecipe.use(
+    helmet({
+      contentSecurityPolicy: false,
+    })
+  );
 appRecipe.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 
 appRecipe.use(cors())
