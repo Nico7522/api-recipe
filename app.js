@@ -1,29 +1,19 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors')
-const db = require('./models');
 require('express-async-errors');
 const appRecipe = express();
 const dataBase = require('./models');
 const route = require('./routes');
-const { main } = require('./mail/main');
 const helmet = require('helmet')
 
-appRecipe.use(
-    helmet({
-      contentSecurityPolicy: false,
-    })
-  );
+
   appRecipe.use(
     helmet({
       crossOriginResourcePolicy: false,
     })
   );
-  appRecipe.use(
-    helmet({
-      xPermittedCrossDomainPolicies: false,
-    })
-  );
+
 
 appRecipe.use(cors())
 dataBase.sequelize.authenticate()
