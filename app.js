@@ -14,7 +14,11 @@ appRecipe.use(
       contentSecurityPolicy: false,
     })
   );
-appRecipe.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
+  appRecipe.use(
+    helmet({
+      crossOriginResourcePolicy: false,
+    })
+  );
 
 appRecipe.use(cors())
 dataBase.sequelize.authenticate()
