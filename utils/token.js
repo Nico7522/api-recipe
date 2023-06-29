@@ -8,7 +8,7 @@ const tokenUtils = {
       const secret = JWT_SECRET;
       const options = {
         algorithm: "HS512",
-        expiresIn: "10d",
+        expiresIn: "1m",
         issuer: JWT_ISSUER,
         audience: JWT_AUDIENCE,
       };
@@ -50,7 +50,6 @@ const tokenUtils = {
       };
       jsonwebtoken.verify(token, JWT_SECRET, options, (error, payload) => {
         if (error) {
-          console.log('eeee', error);
           reject(error);
         }
         resolve(payload);

@@ -10,14 +10,30 @@ const authToken = (status) => {
    */
   return async (req, res, next) => {
     const bearerToken = req.headers.authorization;
-    const refreshToken = req.cookies
-    console.log(refreshToken);
+    const refreshJwt = req.cookies.refreshToken 
+    // console.log(refreshJwt.refreshToken);
+    let payload;
+   
     const token = bearerToken?.split(" ")[1];
+    console.log('token',token);
+    console.log('refreshToken',refreshJwt);
+    console.log(token !== 'undefined');
+    if (token && token !== "" && token !== 'undefined' && token !== null) {
+      if (!refreshJwt || refreshJwt === "" || refreshJwt === 'undefined' || refreshJwt === null) {
+        res.status(403).json(new errorResponse("Please relog", 403));
+    
+      }}
+
     if (!token || token === "" || token === 'undefined' || token === null) {
-      res.status(403).json(new errorResponse("Error, you must be loged", 403));
+      if (!refreshJwt || refreshJwt === "" || refreshJwt === 'undefined' || refreshJwt === null) {
+         res.status(403).json(new errorResponse("Error, you must be loged", 403));
+    
+      }
       
     }
-    const payload = await tokenUtils.decode(token);
+    payload = await tokenUtils.decode(refreshJwt)
+    newToken = await tokenUtils.generate(payload)
+   
     
  
     if (status) {
