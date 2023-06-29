@@ -1,7 +1,6 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors')
-const cookieParser = require('cookie-parser')
 require('express-async-errors');
 const appRecipe = express();
 const dataBase = require('./models');
@@ -26,7 +25,7 @@ if (process.env.NODE_ENV === "development") {
     // dataBase.sequelize.sync()
 }
 
-appRecipe.use(cookieParser());
+
 appRecipe.use(express.static('public'));
 appRecipe.use(express.json())
 appRecipe.use('/api', route);
