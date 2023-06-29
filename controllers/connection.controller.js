@@ -28,7 +28,15 @@ const ConnexionController = {
         return;
     }
     const token = await tokenUtils.generate(user)
-    res.status(200).json(new SuccesResponse({token, user}))
+    const refreshToken = await tokenUtils.refreshToken(user)
+    console.log('refresh token', refreshToken);
+    res.cookie('resfreshToken', refreshToken, { sameSite: 'none', secure: true}).status(200).json(new SuccesResponse({token, user}))
+    // res.cookie('jwt', refreshToken, { httpOnly: true, 
+    //   sameSite: 'None', secure: true, 
+    //   maxAge: 24 * 60 * 60 * 1000 });
+ 
+
+    // res.status(200).json(new SuccesResponse({token, user}))
   },
 };
 module.exports = ConnexionController;

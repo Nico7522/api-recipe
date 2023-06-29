@@ -10,7 +10,8 @@ const authToken = (status) => {
    */
   return async (req, res, next) => {
     const bearerToken = req.headers.authorization;
-
+    const refreshToken = req.cookies
+    console.log(refreshToken);
     const token = bearerToken?.split(" ")[1];
     if (!token || token === "" || token === 'undefined' || token === null) {
       res.status(403).json(new errorResponse("Error, you must be loged", 403));

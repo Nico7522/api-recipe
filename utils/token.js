@@ -20,6 +20,24 @@ const tokenUtils = {
     });
   },
 
+  refreshToken: ({id, status}) => {
+    return new Promise((resolve, reject) => {
+      const payload = { id, status };
+      const secret = JWT_SECRET;
+      const options = {
+        algorithm: "HS512",
+        expiresIn: "10d",
+        issuer: JWT_ISSUER,
+        audience: JWT_AUDIENCE,
+      };
+
+      jsonwebtoken.sign(payload, secret, options, (error, refreshToken) => {
+        error ? reject(error) : resolve(refreshToken);
+       
+      });
+    });
+  }, 
+
   decode: (token) => {
     if (!token || token === "" || token === null || token === undefined) {
       return Promise.reject("Token not found");

@@ -1,14 +1,16 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors')
+const cookieParser = require('cookie-parser')
 require('express-async-errors');
 const appRecipe = express();
 const dataBase = require('./models');
 const route = require('./routes');
-const { AUTHORIZED_ORIGIN } = process.env
+const { PORT, AUTHORIZED_ORIGIN } = process.env
 
 appRecipe.use(cors({
-    origin: AUTHORIZED_ORIGIN
+    origin: AUTHORIZED_ORIGIN,
+    credentials: true,
 }));
 
 
@@ -24,10 +26,10 @@ if (process.env.NODE_ENV === "development") {
     // dataBase.sequelize.sync()
 }
 
-
+appRecipe.use(cookieParser());
 appRecipe.use(express.static('public'));
 appRecipe.use(express.json())
 appRecipe.use('/api', route);
 
 
-appRecipe.listen(process.env.PORT, () => { console.log(`PORT : ${process.env.PORT}`);})
+appRecipe.listen(process.env.PORT, () => { console.log(`PORT : ${PORT}`);})
