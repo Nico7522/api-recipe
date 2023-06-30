@@ -9,6 +9,7 @@ const authToken = (status) => {
    * @param {NextFunction} next
    */
   return async (req, res, next) => {
+    console.log('refreshToken',req.cookies);
     const bearerToken = req.headers.authorization;
     const refreshJwt = req.cookies.refreshToken 
     // console.log(refreshJwt.refreshToken);
@@ -16,7 +17,6 @@ const authToken = (status) => {
    
     const token = bearerToken?.split(" ")[1];
     console.log('token',token);
-    console.log('refreshToken',refreshJwt);
     console.log(token !== 'undefined');
     if (token && token !== "" && token !== 'undefined' && token !== null) {
       if (!refreshJwt || refreshJwt === "" || refreshJwt === 'undefined' || refreshJwt === null) {

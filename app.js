@@ -5,6 +5,7 @@ require('express-async-errors');
 const appRecipe = express();
 const dataBase = require('./models');
 const route = require('./routes');
+const cookieParser = require('cookie-parser')
 const { PORT, AUTHORIZED_ORIGIN } = process.env
 
 appRecipe.use(cors({
@@ -25,7 +26,7 @@ if (process.env.NODE_ENV === "development") {
     // dataBase.sequelize.sync()
 }
 
-
+appRecipe.use(cookieParser())
 appRecipe.use(express.static('public'));
 appRecipe.use(express.json())
 appRecipe.use('/api', route);
