@@ -28,8 +28,8 @@ const recipeController = {
     const { ingredients } = req.query;
  
     const { page, limit, startIndex, endIndex } = req.pagination
-    const recipes = await recipeService.getAllPaginated(startIndex, endIndex, limit, page, tag, nameRecipe, ingredients)
-    res.status(200).json(new SuccesMultipleResponse(recipes, 0))
+    const {recipes, count} = await recipeService.getAllPaginated(startIndex, endIndex, limit, page, tag, nameRecipe, ingredients)
+    res.status(200).json(new SuccesMultipleResponse(recipes, count))
   },
 
 

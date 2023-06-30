@@ -121,7 +121,7 @@ const recipeService = {
         });
     }
 
-    const recipes = await db.Recipe.findAll({
+    const {rows, count } = await db.Recipe.findAndCountAll({
       include: [
         { model: Ingredient, where: whereConditionIngredients },
         { model: User, as: "creator" },
@@ -143,7 +143,9 @@ const recipeService = {
       limit: limit,
       distinct: true,
     });
-    return recipes.map((r) => new RecipeDTO(r));
+    return {recipes :rows.map((r) => new RecipeDTO(r)),
+            count 
+    }
   },
   getAllRaw: async () => {
     const recipes = await db.Recipe.findAll({
