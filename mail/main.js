@@ -23,8 +23,6 @@ const main = {
   },
 
   contact: async (subject,body, mail) => {
-    console.log(subject, body, mail);
-
     let mailOptions = {
       from: `"Contact page" <${mail}>`,
       to: "nico.daddabbo7100@gmail.com",

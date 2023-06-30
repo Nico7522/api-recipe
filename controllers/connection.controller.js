@@ -13,7 +13,11 @@ const ConnexionController = {
     const data = req.body;
     const user = await ConnexionService.signup(data)
     const token = await tokenUtils.generate(user)
-    res.status(201).json(new SuccesResponse({token, user}, 201));
+    const refreshToken = await tokenUtils.refreshToken(user)
+    res.cookie('refreshToken', refreshToken, { 
+      sameSite: 'None', secure: true, 
+      maxAge: 24 * 60 * 60 * 10000 }).status(201).json(new SuccesResponse({token, user}, 201))
+    // res.status(201).json(new SuccesResponse({token, user}, 201));
   },
 
   /**
@@ -29,14 +33,12 @@ const ConnexionController = {
     }
     const token = await tokenUtils.generate(user)
     const refreshToken = await tokenUtils.refreshToken(user)
-    // console.log('refresh token', refreshToken);
-    // res.cookie('resfreshToken', refreshToken, { sameSite: 'none', secure: true}).status(200).json(new SuccesResponse({token, user}))
     res.cookie('refreshToken', refreshToken, { 
-      sameSite: 'None', secure: true, 
-      maxAge: 24 * 60 * 60 * 1000 }).status(200).json(new SuccesResponse({token, user}))
+      sameSite: 'None', secure: true, path: "/recipe",
+      maxAge: 24 * 60 * 60 * 10000 }).status(200).json(new SuccesResponse({token, user}))
  
 
-    // res.status(200).json(new SuccesResponse({token, user}))
+ 
   },
 };
 module.exports = ConnexionController;
