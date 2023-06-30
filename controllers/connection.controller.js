@@ -34,7 +34,7 @@ const ConnexionController = {
     const token = await tokenUtils.generate(user)
     const refreshToken = await tokenUtils.refreshToken(user)
     res.cookie('refreshToken', refreshToken, { 
-      sameSite: 'None', secure: true, path: "/recipe",
+      sameSite: 'None', secure: true, 
       maxAge: 24 * 60 * 60 * 10000 }).status(200).json(new SuccesResponse({token, user}))
  
 
