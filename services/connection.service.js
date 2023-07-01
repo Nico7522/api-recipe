@@ -22,6 +22,11 @@ const ConnexionService = {
         }
 
         return new UserDTO(user);
+    },
+
+    lougout: async (userId) => {
+        const userExist = await db.User.findByPk(userId);
+        return userExist;
     }
 };
 

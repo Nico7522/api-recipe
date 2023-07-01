@@ -36,9 +36,24 @@ const ConnexionController = {
     res.cookie('refreshToken', refreshToken, { 
       sameSite: 'None', secure: true, 
       maxAge: 24 * 60 * 60 * 10000 }).status(200).json(new SuccesResponse({token, user}))
- 
+  },
+  /**
+   * @param {Request} req
+   * @param {Response} res
+   */
+  logout: async (req, res) => {
+    const userId = req.params.id
 
- 
+    const userExist = await ConnexionService.lougout(userId);
+    const refreshToken = req.cookies.refreshToken
+    console.log(refreshToken);
+    if (!userExist) {
+      res.sendStatus(404)
+      return
+    };
+    res.cookie('refreshToken', refreshToken, { 
+      sameSite: 'None', secure: true, 
+      maxAge: 0 }).status(200).json(new SuccesResponse('Disconnected'))
   },
 };
 module.exports = ConnexionController;
